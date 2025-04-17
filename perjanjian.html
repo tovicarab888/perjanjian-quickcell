@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quickcells - Perjanjian Titip Jual</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+    :root {
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --danger: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --dark: #0f172a;
+        --darker: #020617;
+        --light: #f8fafc;
+        --gray: #94a3b8;
+        --border: #334155;
+        --card-bg: rgba(15, 23, 42, 0.95);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: var(--darker);
+        color: var(--light);
+        line-height: 1.6;
+        font-size: 16px;
+        background-image: 
+            linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%),
+            radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.2) 0%, transparent 20%),
+            radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 20%),
+            radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.2) 0%, transparent 25%),
+            radial-gradient(circle at 70% 30%, rgba(20, 184, 166, 0.2) 0%, transparent 25%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        animation: gradientMove 15s ease infinite;
+        background-size: 400% 400%;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 0%, 10% 20%, 90% 80%, 30% 50%, 70% 30%; }
+        50% { background-position: 100% 100%, 20% 30%, 80% 70%, 40% 60%, 60% 40%; }
+        100% { background-position: 0% 0%, 10% 20%, 90% 80%, 30% 50%, 70% 30%; }
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    /* Header Styles */
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        animation: fadeInDown 0.5s ease-out;
+    }
+
+    .logo {
+        height: 160px;
+        margin-bottom: 1rem;
+        object-fit: contain;
+    }
+
+    .title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Form Styles */
+    .form-container {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .form-section {
+        margin-bottom: 2.5rem;
+        animation: fadeIn 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .form-section:nth-child(1) { animation-delay: 0.1s; }
+    .form-section:nth-child(2) { animation-delay: 0.2s; }
+    .form-section:nth-child(3) { animation-delay: 0.3s; }
+    .form-section:nth-child(4) { animation-delay: 0.4s; }
+    .form-section:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--gray);
+        font-size: 0.95rem;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 0.9rem 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(2, 6, 23, 0.7);
+        color: var(--light);
+        transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        transform: translateY(-2px);
+    }
+
+    input.invalid {
+        border-color: var(--danger);
+        animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-5px); }
+        40%, 80% { transform: translateX(5px); }
+    }
+
+    /* Phone input with flag */
+    .phone-input-container {
+        position: relative;
+    }
+
+    .phone-prefix {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .phone-input {
+        padding-left: 4rem !important;
+    }
+
+    /* File Upload Styles */
+    .file-upload-container {
+        margin-top: 1.5rem;
+    }
+
+    .upload-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .file-upload-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .file-upload-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .file-upload-btn.single {
+        background: var(--success);
+    }
+
+    .file-upload-btn.single:hover {
+        background: #059669;
+    }
+
+    .file-upload-input {
+        display: none;
+    }
+
+    .file-preview-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .file-preview {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        aspect-ratio: 1/1;
+        transition: transform 0.3s;
+    }
+
+    .file-preview:hover {
+        transform: scale(1.03);
+    }
+
+    .file-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-file {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: var(--danger);
+        color: white;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .remove-file:hover {
+        transform: scale(1.1);
+        background: #dc2626;
+    }
+
+    /* Signature Styles */
+    .signature-container {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .signature-pads {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .signature-pad {
+        border: 1px solid var(--border);
+        background: white;
+        border-radius: 10px;
+        width: 100%;
+        height: 180px;
+        cursor: crosshair;
+        transition: box-shadow 0.3s;
+    }
+
+    .signature-pad:hover {
+        box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    .signature-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--gray);
+        font-size: 0.95rem;
+    }
+
+    /* Button Styles */
+    .btn {
+        padding: 1rem 1.8rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn-success {
+        background: var(--success);
+    }
+
+    .btn-success:hover {
+        background: #059669;
+    }
+
+    .btn-danger {
+        background: var(--danger);
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+
+    .btn-close {
+        background: var(--gray);
+    }
+
+    .btn-close:hover {
+        background: #64748b;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(2, 6, 23, 0.95);
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    .modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 800px;
+        width: 100%;
+        margin: 1rem auto;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .modal-body {
+        margin-bottom: 1.5rem;
+        color: var(--light);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding-right: 0.8rem;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 3px;
+    }
+
+    .modal-footer {
+        text-align: center;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    /* Photo preview in modal */
+    .photo-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .photo-preview-item {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        transition: transform 0.3s;
+    }
+
+    .photo-preview-item:hover {
+        transform: scale(1.05);
+    }
+
+    .photo-preview-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+    }
+
+    /* Footer Styles */
+    .footer {
+        text-align: center;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+    }
+
+    /* Tooltip styles */
+    [title] {
+        position: relative;
+        cursor: pointer;
+    }
+
+    [title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--dark);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        z-index: 10;
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+    }
+
+    @keyframes tooltipFadeIn {
+        from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .upload-actions {
+            flex-direction: column;
+        }
+        
+        .modal-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+        
+        .photo-preview-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .signature-pads {
+            grid-template-columns: 1fr;
+        }
+
+        .header {
+            padding: 1.5rem 1rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+    }
+    input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+  padding-right: 3rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="https://i.imgur.com/8QHjrmd.png" alt="Quickcells Logo" class="logo" title="Logo Quickcells">   
+            <h1 class="title">Perjanjian Titip Jual Handphone</h1>
+        </header>
+   <!-- Partikel Background -->
+    <div id="particles-js"></div>
+        <div class="form-container">
+            <form id="quickcells-form">
+                <!-- Data Pemilik -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user-tag" title="Data Pemilik"></i> Data Pemilik</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="full-name"><i class="fas fa-user" title="Nama Lengkap"></i> Nama Lengkap</label>
+                            <input type="text" id="full-name" required title="Masukkan nama lengkap Anda">
+                            <div class="error-message" id="full-name-error">Nama lengkap harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ktp"><i class="fas fa-id-card" title="Nomor KTP"></i> Nomor KTP</label>
+                            <input type="text" id="ktp" inputmode="numeric" pattern="[0-9]*" minlength="16" maxlength="16" required title="Masukkan 16 digit nomor KTP">
+                            <div class="error-message" id="ktp-error">Nomor KTP harus 16 digit angka</div>
+                        </div>
+                        <div class="form-group phone-input-container">
+                            <label for="phone"><i class="fas fa-phone" title="Nomor WhatsApp"></i> Nomor WhatsApp</label>
+                            <span class="phone-prefix"><i class="fas fa-flag" title="Indonesia"></i> +62</span>
+                            <input type="tel" id="phone" class="phone-input" inputmode="numeric" pattern="[0-9]*" minlength="9" maxlength="13" required title="Masukkan nomor WhatsApp mulai dari angka 8 (tanpa 0)">
+                            <div class="error-message" id="phone-error">Nomor harus diawali 8 dan minimal 9 digit (setelah +62)</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope" title="Alamat Email"></i> Email</label>
+                            <input type="email" id="email" required title="Masukkan alamat email yang valid">
+                            <div class="error-message" id="email-error">Email tidak valid</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address"><i class="fas fa-map-marker-alt" title="Alamat Lengkap"></i> Alamat Lengkap</label>
+                            <input type="text" id="address" required title="Masukkan alamat lengkap Anda">
+                            <div class="error-message" id="address-error">Alamat harus diisi</div>
+                        </div>
+                    </div>
+                </div>
+
+ <!-- Data Handphone -->
+<div class="form-section">
+  <h3 class="section-title">
+    <i class="fas fa-mobile-alt" title="Data Handphone"></i> Data Handphone
+  </h3>
+  <div class="form-grid">
+
+    <!-- Merek -->
+    <div class="form-group">
+      <label for="phone-brand">
+        <i class="fas fa-mobile" title="Merek Handphone"></i> Merek Handphone
+      </label>
+      <input type="text" id="phone-brand" required title="Masukkan merek handphone (contoh: Samsung, iPhone)">
+      <div class="error-message" id="phone-brand-error">Merek handphone harus diisi</div>
+    </div>
+
+    <!-- Model -->
+    <div class="form-group">
+      <label for="phone-model">
+        <i class="fas fa-mobile-button" title="Model Handphone"></i> Model Handphone
+      </label>
+      <input type="text" id="phone-model" required title="Masukkan model handphone (contoh: Galaxy S23, iPhone 14 Pro)">
+      <div class="error-message" id="phone-model-error">Model handphone harus diisi</div>
+    </div>
+    
+  <div class="form-group">
+            <label for="phone-condition"><i class="fas fa-info-circle"></i> Kondisi Handphone</label>
+            <div class="custom-select">
+                <select id="phone-condition" required>
+                    <option value="">-- Pilih --</option>
+                    <option value="Baru">Baru</option>
+                    <option value="Bekas">Bekas</option>
+                </select>
+                <span class="custom-arrow"></span>
+            </div>
+        </div>
+    <!-- IMEI 1 -->
+    <div class="form-group">
+      <label for="imei1">
+        <i class="fas fa-barcode" title="IMEI 1"></i> IMEI 1
+      </label>
+      <input type="text" id="imei1" inputmode="numeric" pattern="[0-9]{15}" minlength="15" maxlength="15" required title="Masukkan 15 digit IMEI 1">
+      <div class="error-message" id="imei1-error">IMEI harus 15 digit angka</div>
+    </div>
+
+    <!-- IMEI 2 -->
+    <div class="form-group">
+      <label for="imei2">
+        <i class="fas fa-barcode" title="IMEI 2 (jika ada)"></i> IMEI 2 (Jika Ada)
+      </label>
+      <input type="text" id="imei2" inputmode="numeric" pattern="[0-9]{15}" minlength="15" maxlength="15" title="Masukkan 15 digit IMEI 2 (jika ada)">
+      <div class="error-message" id="imei2-error">IMEI harus 15 digit angka</div>
+    </div>
+
+    <!-- Harga Setor -->
+    <div class="form-group">
+      <label for="price">
+        <i class="fas fa-tag" title="Harga Setor"></i> Harga Setor (Rp)
+      </label>
+      <input type="text" id="price" inputmode="numeric" required title="Masukkan harga setor handphone">
+      <div class="error-message" id="price-error">Harga harus diisi</div>
+    </div>
+
+    <!-- Tanggal Mulai -->
+    <div class="form-group">
+      <label for="start-date">
+        <i class="fas fa-calendar" title="Tanggal Mulai"></i> Tanggal Mulai
+      </label>
+      <input type="date" id="start-date" required title="Tanggal mulai perjanjian">
+    </div>
+
+    <!-- Tanggal Berakhir -->
+    <div class="form-group">
+      <label for="end-date">
+        <i class="fas fa-calendar-check" title="Tanggal Berakhir"></i> Tanggal Berakhir
+      </label>
+      <input type="date" id="end-date" readonly title="Tanggal berakhir perjanjian (14 hari setelah mulai)">
+    </div>
+
+                <!-- Upload Foto Handphone -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-camera" title="Foto Handphone"></i> Foto Handphone</h3>
+                    <div class="file-upload-container">
+                        <div class="upload-actions">
+                            <label for="multi-upload" class="file-upload-btn" title="Upload beberapa foto sekaligus (maksimal 10)">
+                                <i class="fas fa-layer-group"></i> Upload Multiple (Maks. 10)
+                                <input type="file" id="multi-upload" class="file-upload-input" accept="image/*" multiple>
+                            </label>
+                            <label for="single-upload" class="file-upload-btn single" title="Upload foto satu per satu">
+                                <i class="fas fa-image"></i> Tambah Foto Satu-satu
+                                <input type="file" id="single-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="file-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="photo-error" style="display:none;">Minimal 1 foto harus diupload</div>
+                    </div>
+                </div>
+
+                <!-- Data Admin -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user-shield" title="Data Admin"></i> Data Admin</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="admin-name"><i class="fas fa-user-tie" title="Nama Admin"></i> Nama Admin</label>
+                            <input type="text" id="admin-name" required title="Masukkan nama admin Quickcells">
+                            <div class="error-message" id="admin-name-error">Nama admin harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-ktp"><i class="fas fa-id-card" title="Nomor KTP Admin"></i> Nomor KTP Admin</label>
+                            <input type="text" id="admin-ktp" inputmode="numeric" pattern="[0-9]*" minlength="16" maxlength="16" required title="Masukkan 16 digit nomor KTP admin">
+                            <div class="error-message" id="admin-ktp-error">Nomor KTP harus 16 digit angka</div>
+                        </div>
+                        <div class="form-group phone-input-container">
+                            <label for="admin-phone"><i class="fas fa-phone-volume" title="Nomor WhatsApp Admin"></i> Nomor WhatsApp</label>
+                            <span class="phone-prefix"><i class="fas fa-flag" title="Indonesia"></i> +62</span>
+                            <input type="tel" id="admin-phone" class="phone-input" inputmode="numeric" pattern="[0-9]*" minlength="9" maxlength="13" required title="Masukkan nomor WhatsApp admin mulai dari angka 8 (tanpa 0)">
+                            <div class="error-message" id="admin-phone-error">Nomor harus diawali 8 dan minimal 9 digit (setelah +62)</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-email"><i class="fas fa-envelope-open-text" title="Email Admin"></i> Email</label>
+                            <input type="email" id="admin-email" required title="Masukkan alamat email admin yang valid">
+                            <div class="error-message" id="admin-email-error">Email tidak valid</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tanda Tangan Digital -->
+                <div class="form-section signature-container">
+                    <h3 class="section-title"><i class="fas fa-signature" title="Tanda Tangan Digital"></i> Tanda Tangan Digital</h3>
+                    <div class="signature-pads">
+                        <div class="signature-pad-container">
+                            <label class="signature-label"><i class="fas fa-user-pen" title="Tanda Tangan Pemilik"></i> Tanda Tangan Pemilik</label>
+                            <canvas class="signature-pad" id="owner-signature" title="Silahkan tanda tangan di area ini"></canvas>
+                            <div class="error-message" id="owner-signature-error" style="display:none;">Tanda tangan pemilik diperlukan</div>
+                            <button type="button" class="btn btn-danger" id="clear-owner" title="Hapus tanda tangan">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                         <!-- Tanda Tangan dengan Indikator -->
+                            <div class="signature-indicator">
+            <span id="sign-status-owner" class="status-red"><i class="fas fa-times"></i> Belum TTD</span>
+                        <div class="signature-pad-container">
+                            <label class="signature-label"><i class="fas fa-user-gear" title="Tanda Tangan Admin"></i> Tanda Tangan Admin</label>
+                            <canvas class="signature-pad" id="admin-signature" title="Silahkan tanda tangan di area ini"></canvas>
+                            <div class="error-message" id="admin-signature-error" style="display:none;">Tanda tangan admin diperlukan</div>
+                            <button type="button" class="btn btn-danger" id="clear-admin" title="Hapus tanda tangan">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+ <!-- Tanda Tangan dengan Indikator -->
+            <span id="sign-status-admin" class="status-red"><i class="fas fa-times"></i> Belum TTD</span>
+        </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-block" id="submit-btn" title="Lanjutkan ke review perjanjian">
+                    <i class="fas fa-file-contract"></i> Lanjut ke Perjanjian
+                </button>
+            </form>
+        </div>
+
+        <!-- Preview Modal -->
+        <div class="modal" id="preview-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Review Perjanjian</h2>
+                </div>
+                <div class="modal-body" id="preview-content">
+                    <!-- Content will be filled by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-actions">
+                        <button class="btn btn-success" id="generate-pdf" title="Download dokumen PDF">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                        <button class="btn btn-close" id="close-preview" title="Tutup preview">
+                            <i class="fas fa-times"></i> Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <!-- Lightbox untuk Foto -->
+    <div id="photo-modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="expanded-img">
+        <!-- Success Modal -->
+        <div class="modal" id="success-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Perjanjian Berhasil Di-download!</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Dokumen perjanjian telah berhasil di-generate. Silahkan kirim file PDF ini ke customer melalui WhatsApp secara manual.</p>
+                    <p>File telah tersimpan di folder Downloads Anda.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="close-modal" title="Tutup notifikasi">
+                        <i class="fas fa-times"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 Quickcells - Taufik Marie | Perjanjian Titip Jual Handphone</p>
+        </footer>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    const { jsPDF } = window.jspdf;
+    let ownerSignaturePad, adminSignaturePad;
+    let uploadedFiles = [];
+
+    // Initialize application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        initSignaturePads();
+        initDateFields();
+        initFormValidation();
+        initFileUpload();
+        initModalHandlers();
+    });
+
+    // Initialize signature pads
+    function initSignaturePads() {
+        ownerSignaturePad = new SignaturePad(document.getElementById('owner-signature'), {
+            backgroundColor: 'rgb(255,255,255)',
+            penColor: 'rgb(0,0,0)',
+            minWidth: 1,
+            maxWidth: 3,
+            throttle: 16
+        });
+        
+        adminSignaturePad = new SignaturePad(document.getElementById('admin-signature'), {
+            backgroundColor: 'rgb(255,255,255)',
+            penColor: 'rgb(0,0,0)',
+            minWidth: 1,
+            maxWidth: 3,
+            throttle: 16
+        });
+
+        // Clear signature buttons
+        document.getElementById('clear-owner').addEventListener('click', () => {
+            ownerSignaturePad.clear();
+            document.getElementById('owner-signature-error').style.display = 'none';
+        });
+
+        document.getElementById('clear-admin').addEventListener('click', () => {
+            adminSignaturePad.clear();
+            document.getElementById('admin-signature-error').style.display = 'none';
+        });
+
+        // Signature validation events
+        ownerSignaturePad.addEventListener('beginStroke', () => {
+            document.getElementById('owner-signature-error').style.display = 'none';
+        });
+
+        adminSignaturePad.addEventListener('beginStroke', () => {
+            document.getElementById('admin-signature-error').style.display = 'none';
+        });
+    }
+
+    // Initialize date fields with today's date and end date (14 days later)
+    function initDateFields() {
+        const today = new Date();
+        const endDate = new Date();
+        endDate.setDate(today.getDate() + 14);
+        
+        document.getElementById('start-date').valueAsDate = today;
+        document.getElementById('end-date').valueAsDate = endDate;
+
+        // Update end date when start date changes
+        document.getElementById('start-date').addEventListener('change', function(e) {
+            const startDate = new Date(e.target.value);
+            const newEndDate = new Date(startDate);
+            newEndDate.setDate(startDate.getDate() + 14);
+            document.getElementById('end-date').valueAsDate = newEndDate;
+        });
+    }
+
+    // Initialize all form validation
+    function initFormValidation() {
+        // Price formatting
+        document.getElementById('price').addEventListener('input', formatPriceInput);
+
+        // Phone number validation
+        ['phone', 'admin-phone'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('input', validatePhoneNumber);
+        });
+
+        // Email validation
+        ['email', 'admin-email'].forEach(id => {
+            document.getElementById(id).addEventListener('input', validateEmail);
+        });
+
+        // KTP validation
+        ['ktp', 'admin-ktp'].forEach(id => {
+            document.getElementById(id).addEventListener('input', validateKTP);
+        });
+
+        // IMEI validation
+        ['imei1', 'imei2'].forEach(id => {
+            document.getElementById(id).addEventListener('input', validateIMEI);
+        });
+
+        // Form submission
+        document.getElementById('quickcells-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                showPreview();
+            }
+        });
+    }
+
+    // Format price input with "Rp" and thousand separators
+    function formatPriceInput(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value ? parseInt(value, 10) : 0;
+        e.target.value = 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+    }
+
+    // Validate phone number (must start with 8)
+    function validatePhoneNumber(e) {
+        const id = e.target.id;
+        let value = e.target.value.replace(/\D/g, '');
+        
+        // Auto remove leading 0 if user types it
+        if (value.startsWith('0')) {
+            value = value.substring(1);
+        }
+        
+        // Ensure it starts with 8
+        if (value.length > 0 && !value.startsWith('8')) {
+            document.getElementById(`${id}-error`).style.display = 'block';
+            e.target.classList.add('invalid');
+        } else {
+            document.getElementById(`${id}-error`).style.display = 'none';
+            e.target.classList.remove('invalid');
+        }
+        
+        e.target.value = value;
+    }
+
+    // Validate email format
+    function validateEmail(e) {
+        const id = e.target.id;
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value);
+        
+        if (!isValid && e.target.value.length > 0) {
+            document.getElementById(`${id}-error`).style.display = 'block';
+            e.target.classList.add('invalid');
+        } else {
+            document.getElementById(`${id}-error`).style.display = 'none';
+            e.target.classList.remove('invalid');
+        }
+    }
+
+    // Validate KTP (must be 16 digits)
+    function validateKTP(e) {
+        const id = e.target.id;
+        const value = e.target.value.replace(/\D/g, '');
+        e.target.value = value;
+        
+        if (value.length > 0 && value.length !== 16) {
+            document.getElementById(`${id}-error`).style.display = 'block';
+            e.target.classList.add('invalid');
+        } else {
+            document.getElementById(`${id}-error`).style.display = 'none';
+            e.target.classList.remove('invalid');
+        }
+    }
+
+    // Validate IMEI (must be 15 digits)
+    function validateIMEI(e) {
+        const id = e.target.id;
+        const value = e.target.value.replace(/\D/g, '');
+        e.target.value = value;
+        
+        if (value.length > 0 && value.length !== 15 && id === 'imei1') {
+            document.getElementById(`${id}-error`).style.display = 'block';
+            e.target.classList.add('invalid');
+        } else {
+            document.getElementById(`${id}-error`).style.display = 'none';
+            e.target.classList.remove('invalid');
+        }
+    }
+
+    // Initialize file upload functionality
+    function initFileUpload() {
+        document.getElementById('multi-upload').addEventListener('change', handleFileUpload);
+        document.getElementById('single-upload').addEventListener('change', handleFileUpload);
+    }
+
+    // Handle file upload and preview
+    function handleFileUpload(e) {
+        const files = e.target.files;
+        const preview = document.getElementById('file-preview');
+        
+        if (files.length + uploadedFiles.length > 10) {
+            alert('Maksimal 10 file.');
+            e.target.value = '';
+            return;
+        }
+
+        Array.from(files).forEach((file) => {
+            if (!file.type.startsWith('image/')) {
+                alert('Hanya file gambar yang diperbolehkan.');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) { // 5MB
+                alert('Ukuran file terlalu besar. Maksimal 5MB per gambar.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'file-preview';
+
+                const img = document.createElement('img');
+                img.src = evt.target.result;
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'remove-file';
+                delBtn.innerHTML = '×';
+                delBtn.onclick = () => {
+                    wrapper.remove();
+                    uploadedFiles = uploadedFiles.filter(f => f.name !== file.name);
+                    updateFileInputs();
+                    if (uploadedFiles.length === 0) {
+                        document.getElementById('photo-error').style.display = 'block';
+                    } else {
+                        document.getElementById('photo-error').style.display = 'none';
+                    }
+                };
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(delBtn);
+                preview.appendChild(wrapper);
+                uploadedFiles.push(file);
+                
+                document.getElementById('photo-error').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        updateFileInputs();
+    }
+
+    // Update file inputs after changes
+    function updateFileInputs() {
+        const dt = new DataTransfer();
+        uploadedFiles.forEach(f => dt.items.add(f));
+        document.getElementById('multi-upload').files = dt.files;
+        document.getElementById('single-upload').files = dt.files;
+    }
+
+    // Validate entire form before submission
+    function validateForm() {
+        let isValid = true;
+        const requiredFields = [
+            'full-name', 'ktp', 'phone', 'email', 'address',
+            'phone-brand', 'phone-model', 'imei1', 'price',
+            'admin-name', 'admin-ktp', 'admin-phone', 'admin-email',
+            'start-date', 'end-date'
+        ];
+
+        // Validate required fields
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('invalid');
+                if (errorElement) errorElement.style.display = 'block';
+            } else {
+                field.classList.remove('invalid');
+                if (errorElement) errorElement.style.display = 'none';
+            }
+        });
+
+        // Validate phone numbers
+        ['phone', 'admin-phone'].forEach(id => {
+            const field = document.getElementById(id);
+            if (field.value && !field.value.startsWith('8')) {
+                isValid = false;
+                field.classList.add('invalid');
+                document.getElementById(`${id}-error`).style.display = 'block';
+            }
+            
+            // Check minimum length (9 digits after +62)
+            if (field.value && field.value.length < 9) {
+                isValid = false;
+                field.classList.add('invalid');
+                document.getElementById(`${id}-error`).style.display = 'block';
+            }
+        });
+
+        // Validate email
+        ['email', 'admin-email'].forEach(id => {
+            const field = document.getElementById(id);
+            if (field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+                isValid = false;
+                field.classList.add('invalid');
+                document.getElementById(`${id}-error`).style.display = 'block';
+            }
+        });
+
+        // Validate KTP length
+        ['ktp', 'admin-ktp'].forEach(id => {
+            const field = document.getElementById(id);
+            if (field.value && field.value.length !== 16) {
+                isValid = false;
+                field.classList.add('invalid');
+                document.getElementById(`${id}-error`).style.display = 'block';
+            }
+        });        
+
+        // Validate IMEI length
+        ['imei1', 'imei2'].forEach(id => {
+            const field = document.getElementById(id);
+            if (field.value && field.value.length !== 15 && id === 'imei1') {
+                isValid = false;
+                field.classList.add('invalid');
+                document.getElementById(`${id}-error`).style.display = 'block';
+            }
+        });
+
+        // Validate price
+        const priceField = document.getElementById('price');
+        if (priceField.value && priceField.value.replace(/\D/g, '') === '0') {
+            isValid = false;
+            priceField.classList.add('invalid');
+            document.getElementById('price-error').style.display = 'block';
+        }
+
+        // Validate photos
+        if (uploadedFiles.length === 0) {
+            isValid = false;
+            document.getElementById('photo-error').style.display = 'block';
+        }
+
+        // Validate signatures
+        if (ownerSignaturePad.isEmpty()) {
+            isValid = false;
+            document.getElementById('owner-signature-error').style.display = 'block';
+        }
+        
+        if (adminSignaturePad.isEmpty()) {
+            isValid = false;
+            document.getElementById('admin-signature-error').style.display = 'block';
+        }
+
+        return isValid;
+    }
+
+    // Show preview modal with all form data
+    function showPreview() {
+        const startDate = new Date(document.getElementById('start-date').value);
+        const endDate = new Date(document.getElementById('end-date').value);
+        const priceValue = document.getElementById('price').value.replace(/\D/g, '');
+        const formattedPrice = priceValue ? parseInt(priceValue, 10).toLocaleString('id-ID') : '0';
+
+        let photosHTML = '';
+        if (uploadedFiles.length > 0) {
+            photosHTML = '<div style="margin-top:1.5rem;"><p style="font-weight:600;">Foto Handphone:</p><div class="photo-preview-grid">';
+            
+            Array.from(uploadedFiles).forEach(file => {
+                photosHTML += `
+                    <div class="photo-preview-item">
+                        <img src="${URL.createObjectURL(file)}" alt="Foto Handphone">
+                    </div>
+                `;
+            });
+            
+            photosHTML += '</div></div>';
+        }
+
+        document.getElementById('preview-content').innerHTML = `
+            <div style="margin-bottom:1.5rem;">
+                <p>Pada hari ini, tanggal <strong>${startDate.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong>, bertempat di <strong>${document.getElementById('address').value}</strong>, telah dibuat dan ditandatangani Perjanjian Titip Jual Handphone antara:</p>
+            </div>
+            
+            <div style="background:rgba(59,130,246,0.1);padding:1rem;border-radius:8px;margin-bottom:1.5rem;">
+                <p style="color:var(--primary);font-weight:600;margin-bottom:0.5rem;">PIHAK PERTAMA (PEMILIK):</p>
+                <p>Nama: <strong>${document.getElementById('full-name').value}</strong></p>
+                <p>No. KTP: <strong>${document.getElementById('ktp').value}</strong></p>
+                <p>WhatsApp: <strong>+62${document.getElementById('phone').value}</strong></p>
+                <p>Email: <strong>${document.getElementById('email').value}</strong></p>
+                <p>Alamat: <strong>${document.getElementById('address').value}</strong></p>
+            </div>
+            
+            <div style="background:rgba(16,185,129,0.1);padding:1rem;border-radius:8px;margin-bottom:1.5rem;">
+                <p style="color:var(--success);font-weight:600;margin-bottom:0.5rem;">PIHAK KEDUA (ADMIN):</p>
+                <p>Nama: <strong>${document.getElementById('admin-name').value}</strong></p>
+                <p>No. KTP: <strong>${document.getElementById('admin-ktp').value}</strong></p>
+                <p>WhatsApp: <strong>+62${document.getElementById('admin-phone').value}</strong></p>
+                <p>Email: <strong>${document.getElementById('admin-email').value}</strong></p>
+            </div>
+            
+            <div style="background:rgba(99,102,241,0.1);padding:1rem;border-radius:8px;margin-bottom:1.5rem;">
+                <p style="color:#6366f1;font-weight:600;margin-bottom:0.5rem;">DATA HANDPHONE:</p>
+                <p>Merek: <strong>${document.getElementById('phone-brand').value}</strong></p>
+                <p>Model: <strong>${document.getElementById('phone-model').value}</strong></p>
+                <p>IMEI 1: <strong>${document.getElementById('imei1').value}</strong></p>
+                <p>IMEI 2: <strong>${document.getElementById('imei2').value || '-'}</strong></p>
+                <p>Harga Setor: <strong>Rp ${formattedPrice}</strong></p>
+                <p>Periode: <strong>${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}</strong></p>
+            </div>
+            
+            <div style="margin:1.5rem 0;border-top:1px dashed var(--border);padding-top:1.5rem;">
+                <p style="font-weight:600;color:var(--primary);margin-bottom:1rem;">PASAL-PASAL PERJANJIAN:</p>
+                <ol style="padding-left:1.5rem;">
+                    <li style="margin-bottom:0.5rem;">Pihak Pertama menyerahkan dan Pihak Kedua menerima titipan berupa handphone ${document.getElementById('phone-brand').value} ${document.getElementById('phone-model').value} dengan harga Rp ${formattedPrice} untuk dijual oleh Pihak Kedua.</li>
+                    <li style="margin-bottom:0.5rem;">Pihak Kedua bertanggung jawab penuh atas keamanan dan keutuhan handphone selama dalam masa penitipan.</li>
+                    <li style="margin-bottom:0.5rem;">Apabila handphone terjual, Pihak Kedua wajib mentransfer dana hasil penjualan (setelah dipotong komisi) kepada Pihak Pertama dalam waktu 1x24 jam setelah pembayaran diterima.</li>
+                    <li style="margin-bottom:0.5rem;">Pihak Kedua berhak mendapatkan komisi sebesar 10% dari harga jual handphone.</li>
+                    <li style="margin-bottom:0.5rem;">Perjanjian ini berlaku selama 14 (empat belas) hari kalender terhitung sejak tanggal penandatanganan (${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}).</li>
+                    <li style="margin-bottom:0.5rem;">Jika handphone tidak terjual dalam masa perjanjian, Pihak Kedua wajib mengembalikan handphone dalam keadaan utuh kepada Pihak Pertama.</li>
+                    <li style="margin-bottom:0.5rem;">Segala bentuk perselisihan yang timbul dari perjanjian ini akan diselesaikan secara musyawarah untuk mufakat.</li>
+                </ol>
+            </div>
+            
+            ${photosHTML}
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;border-top:1px dashed var(--border);padding-top:1.5rem;">
+                <div style="text-align:center;">
+                    <p style="font-weight:600;margin-bottom:1rem;">Tanda Tangan Pemilik</p>
+                    <div style="height:100px;margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;">
+                        ${!ownerSignaturePad.isEmpty() ? `<img src="${ownerSignaturePad.toDataURL()}" style="max-height:100px;" />` : '<p style="color:var(--danger);">Belum ditandatangani</p>'}
+                    </div>
+                    <p>(${document.getElementById('full-name').value})</p>
+                </div>
+                <div style="text-align:center;">
+                    <p style="font-weight:600;margin-bottom:1rem;">Tanda Tangan Admin</p>
+                     <div style="height:100px;margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;">
+                        ${!adminSignaturePad.isEmpty() ? `<img src="${adminSignaturePad.toDataURL()}" style="max-height:100px;" />` : '<p style="color:var(--danger);">Belum ditandatangani</p>'}
+                    </div>
+                    <p>(${document.getElementById('admin-name').value})</p>
+                </div>
+            </div>
+            
+                  <div style="margin-top:2rem;padding-top:1rem;border-top:1px dashed var(--border);">
+                <p style="font-size:0.8rem;color:var(--gray);">Perjanjian ini dibuat dan ditandatangani secara sadar tanpa paksaan dari pihak manapun dan memiliki kekuatan hukum yang mengikat sesuai dengan ketentuan yang berlaku.</p>
+            </div>
+        `;
+
+        document.getElementById('preview-modal').style.display = 'flex';
+    }
+
+    // Initialize modal handlers
+    function initModalHandlers() {
+        document.getElementById('generate-pdf').addEventListener('click', generatePDF);
+        document.getElementById('close-preview').addEventListener('click', () => {
+            document.getElementById('preview-modal').style.display = 'none';
+        });
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('success-modal').style.display = 'none';
+        });
+    }
+
+    // Generate PDF document
+    async function generatePDF() {
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        // Add logo
+        const logo = await loadImage('https://i.imgur.com/8QHjrmd.png');
+        pdf.addImage(logo, 'PNG', 15, 10, 30, 15);
+        
+        // Add title
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(18);
+        pdf.setTextColor(40, 40, 40);
+        pdf.text('PERJANJIAN TITIP JUAL HANDPHONE', 105, 20, { align: 'center' });
+        
+        // Add document info
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(10);
+        pdf.setTextColor(100, 100, 100);
+        const docNumber = `QC-${new Date().getFullYear()}${String(new Date().getMonth()+1).padStart(2,'0')}${String(new Date().getDate()).padStart(2,'0')}-${Math.floor(1000 + Math.random() * 9000)}`;
+        pdf.text(`No. Dokumen: ${docNumber}`, 15, 30);
+        pdf.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 180, 30, { align: 'right' });
+        
+        // Add content
+        pdf.setFontSize(12);
+        pdf.setTextColor(60, 60, 60);
+        let yPos = 40;
+        
+        // Add party data
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('PIHAK PERTAMA (PEMILIK)', 15, yPos);
+        yPos += 7;
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Nama: ${document.getElementById('full-name').value}`, 20, yPos); yPos += 7;
+        pdf.text(`No. KTP: ${document.getElementById('ktp').value}`, 20, yPos); yPos += 7;
+        pdf.text(`WhatsApp: +62${document.getElementById('phone').value}`, 20, yPos); yPos += 7;
+        pdf.text(`Email: ${document.getElementById('email').value}`, 20, yPos); yPos += 7;
+        pdf.text(`Alamat: ${document.getElementById('address').value}`, 20, yPos); yPos += 10;
+        
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('PIHAK KEDUA (ADMIN)', 15, yPos);
+        yPos += 7;
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Nama: ${document.getElementById('admin-name').value}`, 20, yPos); yPos += 7;
+        pdf.text(`No. KTP: ${document.getElementById('admin-ktp').value}`, 20, yPos); yPos += 7;
+        pdf.text(`WhatsApp: +62${document.getElementById('admin-phone').value}`, 20, yPos); yPos += 7;
+        pdf.text(`Email: ${document.getElementById('admin-email').value}`, 20, yPos); yPos += 10;
+        
+        // Add phone data
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('DATA HANDPHONE', 15, yPos);
+        yPos += 7;
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Merek: ${document.getElementById('phone-brand').value}`, 20, yPos); yPos += 7;
+        pdf.text(`Model: ${document.getElementById('phone-model').value}`, 20, yPos); yPos += 7;
+        pdf.text(`IMEI 1: ${document.getElementById('imei1').value}`, 20, yPos); yPos += 7;
+        pdf.text(`IMEI 2: ${document.getElementById('imei2').value || '-'}`, 20, yPos); yPos += 7;
+        const priceValue = document.getElementById('price').value.replace(/\D/g, '');
+        const formattedPrice = priceValue ? parseInt(priceValue, 10).toLocaleString('id-ID') : '0';
+        pdf.text(`Harga Setor: Rp ${formattedPrice}`, 20, yPos); yPos += 7;
+        
+        const startDate = new Date(document.getElementById('start-date').value);
+        const endDate = new Date(document.getElementById('end-date').value);
+        pdf.text(`Periode: ${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}`, 20, yPos); yPos += 10;
+        
+        // Add terms
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('PASAL-PASAL PERJANJIAN', 15, yPos); yPos += 7;
+        pdf.setFont('helvetica', 'normal');
+        [
+            `1. Pihak Pertama menyerahkan dan Pihak Kedua menerima titipan berupa handphone ${document.getElementById('phone-brand').value} ${document.getElementById('phone-model').value} dengan harga Rp ${formattedPrice} untuk dijual oleh Pihak Kedua.`,
+            '2. Pihak Kedua bertanggung jawab penuh atas keamanan dan keutuhan handphone selama dalam masa penitipan.',
+            '3. Apabila handphone terjual, Pihak Kedua wajib mentransfer dana hasil penjualan (setelah dipotong komisi) kepada Pihak Pertama dalam waktu 1x24 jam setelah pembayaran diterima.',
+            '4. Pihak Kedua berhak mendapatkan komisi sebesar 10% dari harga jual handphone.',
+            `5. Perjanjian ini berlaku selama 14 (empat belas) hari kalender terhitung sejak tanggal penandatanganan (${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}).`,
+            '6. Jika handphone tidak terjual dalam masa perjanjian, Pihak Kedua wajib mengembalikan handphone dalam keadaan utuh kepada Pihak Pertama.',
+            '7. Segala bentuk perselisihan yang timbul dari perjanjian ini akan diselesaikan secara musyawarah untuk mufakat.'
+        ].forEach(term => { 
+            const lines = pdf.splitTextToSize(term, 170);
+            lines.forEach(line => {
+                if (yPos > 270) { // Check if we need a new page
+                    pdf.addPage();
+                    yPos = 20;
+                }
+                pdf.text(line, 20, yPos);
+                yPos += 7;
+            });
+            yPos += 2;
+        });
+        
+        // Add photos if any
+        if (uploadedFiles.length > 0) {
+            if (yPos > 200) { // Ensure enough space for photos
+                pdf.addPage();
+                yPos = 20;
+            } else {
+                yPos += 10;
+            }
+            
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('FOTO HANDPHONE', 15, yPos); yPos += 7;
+            
+            let photoX = 20;
+            let photoY = yPos;
+            const photoSize = 40;
+            const gap = 10;
+            let photosInRow = 0;
+            
+            for (let i = 0; i < Math.min(uploadedFiles.length, 4); i++) {
+                if (photosInRow >= 4 || photoX + photoSize > 180) {
+                    photoX = 20;
+                    photoY += photoSize + gap;
+                    photosInRow = 0;
+                    
+                    if (photoY + photoSize > 270) { // Check if we need a new page
+                        pdf.addPage();
+                        photoY = 20;
+                    }
+                }
+                
+                try {
+                    const img = await loadImage(URL.createObjectURL(uploadedFiles[i]));
+                    pdf.addImage(img, 'JPEG', photoX, photoY, photoSize, photoSize);
+                    photoX += photoSize + gap;
+                    photosInRow++;
+                } catch (error) {
+                    console.error('Error loading image:', error);
+                }
+            }
+            
+            yPos = photoY + photoSize + 10;
+        }
+        
+        // Add signatures
+        if (yPos > 200) { // Ensure enough space for signatures
+            pdf.addPage();
+            yPos = 20;
+        } else {
+            yPos += 10;
+        }
+        
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('TANDA TANGAN', 15, yPos); yPos += 10;
+        
+        if (!ownerSignaturePad.isEmpty()) {
+            const ownerSig = ownerSignaturePad.toDataURL();
+            pdf.addImage(ownerSig, 'PNG', 30, yPos, 50, 20);
+            pdf.text(`Pemilik: ${document.getElementById('full-name').value}`, 30, yPos + 25);
+        }
+        
+        if (!adminSignaturePad.isEmpty()) {
+            const adminSig = adminSignaturePad.toDataURL();
+            pdf.addImage(adminSig, 'PNG', 130, yPos, 50, 20);
+            pdf.text(`Admin: ${document.getElementById('admin-name').value}`, 130, yPos + 25);
+        }
+
+        // Add footer
+        pdf.setFontSize(8);
+        pdf.setTextColor(120, 120, 120);
+        pdf.text('Dokumen ini sah dan berlaku tanpa stempel berdasarkan Pasal 1320 KUHPerdata. Desain oleh Taufik Marie.', 105, 287, { align: 'center' });
+        
+        // Save PDF
+        pdf.save(`Perjanjian_Titip_Jual_${docNumber}.pdf`);
+        
+        document.getElementById('preview-modal').style.display = 'none';
+        document.getElementById('success-modal').style.display = 'flex';
+    }
+
+    // Helper function to load images for PDF
+    function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+    // Auto-save ke localStorage
+setInterval(() => {
+    const formData = new FormData(document.getElementById('quickcells-form'));
+    localStorage.setItem('draft-perjanjian', JSON.stringify(Object.fromEntries(formData)));
+}, 3000);
+
+// Validasi IMEI
+function validateIMEI(imei) {
+    return /^\d{15}$/.test(imei) && luhnCheck(imei);
+}
+
+// Efek Suara
+function playSuccessSound() {
+    document.getElementById('success-sound').play();
+}
+
+// Kondisi Handphone
+document.getElementById('phone-condition').addEventListener('change', function() {
+    const completenessWrapper = document.getElementById('completeness-wrapper');
+    if (this.value === 'Bekas') {
+        completenessWrapper.style.display = 'block';
+    } else {
+        completenessWrapper.style.display = 'none';
+    }
+});
+
+// Tanda Tangan Real-time
+ownerSignaturePad.addEventListener('beginStroke', () => {
+    document.getElementById('sign-status-owner').className = 'status-green';
+    document.getElementById('sign-status-owner').innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sedang Menandatangani';
+});
+
+// Confetti
+function triggerConfetti() {
+    const confettiSettings = { 
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 } 
+    };
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confetti = new Confetti(confettiCanvas, confettiSettings);
+    confetti.fire();
+}
+
+// Auto-scroll ke Error
+function scrollToFirstError() {
+    const firstError = document.querySelector('.invalid');
+    if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Animasi getar
+        firstError.style.animation = 'shake 0.5s';
+        setTimeout(() => firstError.style.animation = '', 500);
+    }
+}
+</script>
+</body>
+</html>div>
