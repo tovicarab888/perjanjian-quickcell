@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUICKCELLS TITIP JUAL - Sistem Perjanjian</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">   
+        <!-- Sound Effects -->
+    <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" preload="auto"></audio>
+    <style>
+    :root {
+        --primary: #00a8ff;
+        --primary-dark: #0077ff;
+        --primary-light: #a0f0ff;
+        --bg-gradient: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+        --danger: #ff3860;
+        --success: #2ecc71;
+        --warning: #ffdd57;
+        --dark: #0f172a;
+        --darker: #020617;
+        --light: #f8fafc;
+        --gray: #94a3b8;
+        --border: #334155;
+        --card-bg: rgba(15, 23, 42, 0.95);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    body {
+        background: var(--bg-gradient);
+        color: var(--light);
+        line-height: 1.6;
+        font-size: 16px;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .logo {
+        height: 150px;
+        margin-bottom: 1rem;
+        object-fit: contain;
+    }
+
+    .title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        color: var(--primary-light);
+        font-size: 1rem;
+    }
+
+    .form-container {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .form-section {
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .section-title i {
+        color: var(--primary);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--primary-light);
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.9rem 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(2, 6, 23, 0.7);
+        color: var(--light);
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.3);
+    }
+
+    .form-group input.invalid,
+    .form-group select.invalid,
+    .form-group textarea.invalid {
+        border-color: var(--danger);
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .phone-input-container {
+        position: relative;
+    }
+
+    .phone-prefix {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .phone-input {
+        padding-left: 4rem !important;
+    }
+
+    .price-input-container {
+        position: relative;
+    }
+
+    .price-prefix {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        pointer-events: none;
+    }
+
+    .price-input {
+        padding-left: 3rem !important;
+    }
+
+    .file-upload-container {
+        margin-top: 1.5rem;
+    }
+
+    .upload-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .file-upload-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .file-upload-btn:hover {
+        background: var(--primary);
+    }
+
+    .file-upload-btn.single {
+        background: var(--success);
+    }
+
+    .file-upload-btn.single:hover {
+        background: #27ae60;
+    }
+
+    .file-upload-input {
+        display: none;
+    }
+
+    .file-preview-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .file-preview {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        aspect-ratio: 1/1;
+    }
+
+    .file-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-file {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: var(--danger);
+        color: white;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .signature-container {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .signature-pads {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .signature-pad {
+        border: 1px solid var(--border);
+        background: white;
+        border-radius: 10px;
+        width: 100%;
+        height: 180px;
+        cursor: crosshair;
+    }
+
+    .signature-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--primary-light);
+        font-size: 0.95rem;
+    }
+
+    .signature-pad-container {
+        position: relative;
+    }
+
+    .signature-status {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .signature-status.red {
+        color: var(--danger);
+    }
+
+    .signature-status.green {
+        color: var(--success);
+    }
+
+    .btn {
+        padding: 1rem 1.8rem;
+        background: var(--primary-dark);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: var(--primary);
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn-success {
+        background: var(--success);
+    }
+
+    .btn-success:hover {
+        background: #27ae60;
+    }
+
+    .btn-danger {
+        background: var(--danger);
+    }
+
+    .btn-danger:hover {
+        background: #e74c3c;
+    }
+
+    .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 20px;
+        margin-left: 0.5rem;
+    }
+
+    .status-red {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--danger);
+    }
+
+    .status-green {
+        background: rgba(46, 204, 113, 0.2);
+        color: var(--success);
+    }
+
+    .status-blue {
+        background: rgba(0, 168, 255, 0.2);
+        color: var(--primary);
+    }
+
+    .conditional-field {
+        display: none;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(2, 6, 23, 0.95);
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 1rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 800px;
+        width: 90%;
+        margin: auto;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .modal-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .modal-body {
+        margin-bottom: 1.5rem;
+        color: var(--light);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding-right: 0.8rem;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 3px;
+    }
+
+    .modal-footer {
+        text-align: center;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .photo-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .photo-preview-item {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    .photo-preview-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+    }
+
+    .footer {
+        text-align: center;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+    }
+
+    .tech-stack {
+        display: flex;
+        justify-content: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .tech-badge {
+        background: rgba(0, 168, 255, 0.1);
+        color: var(--primary-light);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        border: 1px solid var(--primary);
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: help;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: var(--dark);
+        color: var(--light);
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.8rem;
+        border: 1px solid var(--primary);
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .success-pulse {
+        animation: pulse 1s ease-in-out;
+    }
+
+    .quantum-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .upload-actions {
+            flex-direction: column;
+        }
+        
+        .modal-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+
+        .photo-preview-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .signature-pads {
+            grid-template-columns: 1fr;
+        }
+
+        .header {
+            padding: 1.5rem 1rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+        
+        .title {
+            font-size: 1.5rem;
+        }
+
+        .tooltip .tooltiptext {
+            width: 150px;
+            font-size: 0.7rem;
+        }
+
+        .modal-content {
+            width: 95%;
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .file-preview-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .modal-content, .modal-content * {
+            visibility: visible;
+        }
+        .modal-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: auto;
+            border: none;
+            box-shadow: none;
+        }
+    }
+    .form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.error-message {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: none;
+    transition: all 0.3s ease;
+}
+
+        /* CSS untuk Signature Pad */
+        .signature-container {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .signature-pads {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .signature-pad-container {
+            position: relative;
+        }
+
+        .signature-pad {
+            width: 100%;
+            height: 180px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .signature-pad.saved {
+            border: 2px solid var(--success);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .signature-saved {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--success);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            display: none;
+            z-index: 2;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .signature-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .signature-status {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+        }
+
+        .signature-status i {
+            font-size: 1rem;
+        }
+
+        .signature-status.unsaved {
+            color: var(--warning);
+        }
+
+        .signature-status.saved {
+            color: var(--success);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .signature-pads {
+                grid-template-columns: 1fr;
+            }
+            
+            .signature-pad {
+                height: 150px;
+            }
+        }
+        
+.signature-pad.saved {
+    border: 2px solid var(--success);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+    cursor: not-allowed;
+    background-color: #f8f8f8;
+    pointer-events: none;
+}
+
+.signature-pad.saved::after {
+    content: "Tanda tangan telah terkunci";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--success);
+    font-size: 0.9rem;
+    text-align: center;
+    width: 100%;
+    pointer-events: none;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <header class="header">
+            <img src="https://i.imgur.com/8QHjrmd.png" alt="Quickcells Titip Jual Logo" class="logo" title="Quickcells Titip Jual">   
+            <h1 class="title">PERJANJIAN TITIP JUAL HANDPHONE <span class="status-indicator status-blue">QUICKCELLS</span></h1>
+            <p class="subtitle">Sistem Perjanjian Titip Jual Handphone Profesional</p>
+        </header>
+        
+        <div class="form-container">
+            <form id="quickcells-form">
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user-tag"></i> Data Pemilik</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="full-name"><i class="fas fa-user"></i> Nama Lengkap</label>
+                            <input type="text" id="full-name" required title="Masukkan nama lengkap Anda">
+                            <div class="error-message" id="full-name-error">Nama lengkap harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ktp"><i class="fas fa-id-card"></i> Nomor KTP</label>
+                            <input type="text" id="ktp" inputmode="numeric" pattern="[0-9]*" minlength="16" maxlength="16" required title="Masukkan 16 digit nomor KTP">
+                            <div class="error-message" id="ktp-error">Nomor KTP harus 16 digit angka</div>
+                        </div>
+                        <div class="form-group phone-input-container">
+                            <label for="phone"><i class="fas fa-phone"></i> Nomor WhatsApp</label>
+                            <span class="phone-prefix"><i class="fas fa-flag"></i> +62</span>
+                            <input type="tel" id="phone" class="phone-input" inputmode="numeric" pattern="[0-9]*" minlength="9" maxlength="13" required title="Masukkan nomor WhatsApp mulai dari angka 8 (tanpa 0)">
+                            <div class="error-message" id="phone-error">Nomor harus diawali 8 dan minimal 9 digit (setelah +62)</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="email" required title="Masukkan alamat email yang valid">
+                            <div class="error-message" id="email-error">Email tidak valid</div>
+                        </div>
+                     <div class="form-group">
+    <label for="address"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
+    <textarea id="address" rows="4" required title="Masukkan alamat lengkap Anda" style="min-height: 120px;"></textarea>
+    <div class="error-message" id="address-error">Alamat harus diisi</div>
+</div>
+                    
+                    <div class="file-upload-container">
+                        <h4 class="section-title"><i class="fas fa-camera"></i> Foto Wajah Pemilik</h4>
+                        <div class="upload-actions">
+                            <label for="face-upload" class="file-upload-btn" title="Upload foto wajah">
+                                <i class="fas fa-upload"></i> Upload Foto Wajah
+                                <input type="file" id="face-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="face-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="face-error" style="display:none;">Foto wajah diperlukan</div>
+                    </div>
+                    
+                    <div class="file-upload-container">
+                        <h4 class="section-title"><i class="fas fa-id-card"></i> Foto KTP Pemilik</h4>
+                        <div class="upload-actions">
+                            <label for="ktp-upload" class="file-upload-btn" title="Upload foto KTP">
+                                <i class="fas fa-upload"></i> Upload Foto KTP
+                                <input type="file" id="ktp-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="ktp-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="ktp-photo-error" style="display:none;">Foto KTP diperlukan</div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-mobile-alt"></i> Data Handphone</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="phone-brand"><i class="fas fa-mobile"></i> Merek Handphone</label>
+                            <input type="text" id="phone-brand" required title="Masukkan merek handphone (contoh: Samsung, iPhone)">
+                            <div class="error-message" id="phone-brand-error">Merek handphone harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-model"><i class="fas fa-mobile-button"></i> Model Handphone</label>
+                            <input type="text" id="phone-model" required title="Masukkan model handphone (contoh: Galaxy S23, iPhone 14 Pro)">
+                            <div class="error-message" id="phone-model-error">Model handphone harus diisi</div>
+                        </div>
+                                    <div class="form-group">
+                            <label for="phone-condition"><i class="fas fa-info-circle"></i> Kondisi Handphone</label>
+                            <select id="phone-condition" required>
+                                <option value="">-- Pilih --</option>
+                                <option value="Baru">Baru</option>
+                                <option value="Bekas">Bekas</option>
+                            </select>
+                        </div>
+                        <div class="form-group conditional-field" id="completeness-wrapper">
+                            <label for="phone-completeness"><i class="fas fa-check-circle"></i> Kelengkapan</label>
+                            <select id="phone-completeness">
+                                <option value="">-- Pilih --</option>
+                                <option value="Lengkap">Lengkap</option>
+                                <option value="Tidak Lengkap">Tidak Lengkap</option>
+                            </select>
+                        </div>
+                        <div class="form-group conditional-field" id="completeness-detail-wrapper">
+                            <label for="completeness-detail"><i class="fas fa-comment-dots"></i> Detail Kelengkapan</label>
+                            <input type="text" id="completeness-detail" placeholder="Contoh: Unit saja, Unit + Charger tanpa box">
+                            <div class="error-message" id="completeness-detail-error">Detail kelengkapan harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ram"><i class="fas fa-memory"></i> RAM (GB)</label>
+                            <input type="number" id="ram" min="1" max="64" title="Masukkan jumlah RAM dalam GB">
+                        </div>
+                        <div class="form-group">
+                            <label for="storage"><i class="fas fa-hdd"></i> Penyimpanan (GB)</label>
+                            <input type="number" id="storage" min="8" max="1024" title="Masukkan kapasitas penyimpanan dalam GB">
+                        </div>
+                        <div class="form-group">
+                            <label for="imei1"><i class="fas fa-barcode"></i> IMEI 1</label>
+                            <input type="text" id="imei1" inputmode="numeric" pattern="[0-9]{15}" minlength="15" maxlength="15" required title="Masukkan 15 digit IMEI 1">
+                            <div class="error-message" id="imei1-error">IMEI harus 15 digit angka</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="imei2"><i class="fas fa-barcode"></i> IMEI 2 (Jika Ada)</label>
+                            <input type="text" id="imei2" inputmode="numeric" pattern="[0-9]{15}" minlength="15" maxlength="15" title="Masukkan 15 digit IMEI 2 (jika ada)">
+                            <div class="error-message" id="imei2-error">IMEI harus 15 digit angka</div>
+                        </div>
+                        <div class="form-group price-input-container">
+                            <label for="price"><i class="fas fa-tag"></i> Harga Setor (Rp)</label>
+                            <span class="price-prefix">Rp</span>
+                            <input type="text" id="price" inputmode="decimal" required title="Masukkan harga setor handphone">
+                            <div class="error-message" id="price-error">Harga harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="start-date"><i class="fas fa-calendar"></i> Tanggal Mulai</label>
+                            <input type="date" id="start-date" required title="Tanggal mulai perjanjian">
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date"><i class="fas fa-calendar-check"></i> Tanggal Berakhir</label>
+                            <input type="date" id="end-date" readonly title="Tanggal berakhir perjanjian (14 hari setelah mulai)">
+                        </div>
+                    </div>
+                           <div class="file-upload-container">
+                        <h4 class="section-title"><i class="fas fa-camera"></i> Foto Handphone (Min. 3 Foto)</h4>
+                        <div class="upload-actions">
+                            <label for="multi-upload" class="file-upload-btn" title="Upload beberapa foto sekaligus (maksimal 10)">
+                                <i class="fas fa-layer-group"></i> Upload Multiple (Maks. 10)
+                                <input type="file" id="multi-upload" class="file-upload-input" accept="image/*" multiple>
+                            </label>
+                            <label for="single-upload" class="file-upload-btn single" title="Upload foto satu per satu">
+                                <i class="fas fa-image"></i> Tambah Foto Satu-satu
+                                <input type="file" id="single-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="file-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="photo-error" style="display:none;">Minimal 3 foto harus diupload</div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user-shield"></i> Data Admin</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="admin-name"><i class="fas fa-user-tie"></i> Nama Admin</label>
+                            <input type="text" id="admin-name" required title="Masukkan nama admin Quickcells">
+                            <div class="error-message" id="admin-name-error">Nama admin harus diisi</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-ktp"><i class="fas fa-id-card"></i> Nomor KTP Admin</label>
+                            <input type="text" id="admin-ktp" inputmode="numeric" pattern="[0-9]*" minlength="16" maxlength="16" required title="Masukkan 16 digit nomor KTP admin">
+                            <div class="error-message" id="admin-ktp-error">Nomor KTP harus 16 digit angka</div>
+                        </div>
+                        <div class="form-group phone-input-container">
+                            <label for="admin-phone"><i class="fas fa-phone-volume"></i> Nomor WhatsApp</label>
+                            <span class="phone-prefix"><i class="fas fa-flag"></i> +62</span>
+                            <input type="tel" id="admin-phone" class="phone-input" inputmode="numeric" pattern="[0-9]*" minlength="9" maxlength="13" required title="Masukkan nomor WhatsApp admin mulai dari angka 8 (tanpa 0)">
+                            <div class="error-message" id="admin-phone-error">Nomor harus diawali 8 dan minimal 9 digit (setelah +62)</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-email"><i class="fas fa-envelope-open-text"></i> Email</label>
+                            <input type="email" id="admin-email" required title="Masukkan alamat email admin yang valid">
+                            <div class="error-message" id="admin-email-error">Email tidak valid</div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-upload-container">
+                        <h4 class="section-title"><i class="fas fa-camera"></i> Foto Wajah Admin</h4>
+                        <div class="upload-actions">
+                            <label for="admin-face-upload" class="file-upload-btn" title="Upload foto wajah admin">
+                                <i class="fas fa-upload"></i> Upload Foto Wajah Admin
+                                <input type="file" id="admin-face-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="admin-face-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="admin-face-error" style="display:none;">Foto wajah admin diperlukan</div>
+                    </div>
+                    
+                    <div class="file-upload-container">
+                        <h4 class="section-title"><i class="fas fa-id-card"></i> Foto KTP Admin</h4>
+                        <div class="upload-actions">
+                            <label for="admin-ktp-upload" class="file-upload-btn" title="Upload foto KTP admin">
+                                <i class="fas fa-upload"></i> Upload Foto KTP Admin
+                                <input type="file" id="admin-ktp-upload" class="file-upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="admin-ktp-preview" class="file-preview-container"></div>
+                        <div class="error-message" id="admin-ktp-photo-error" style="display:none;">Foto KTP admin diperlukan</div>
+                    </div>
+                </div>
+
+<div class="form-section signature-container">
+        <h3 class="section-title"><i class="fas fa-signature"></i> Tanda Tangan Digital</h3>
+        <div class="signature-pads">
+            <!-- Tanda Tangan Pemilik -->
+            <div class="signature-pad-container">
+                <label class="signature-label"><i class="fas fa-user-pen"></i> Tanda Tangan Pemilik</label>
+                <canvas class="signature-pad" id="owner-signature" title="Silahkan tanda tangan di area ini"></canvas>
+                <span id="owner-saved-badge" class="signature-saved"><i class="fas fa-check"></i> Tersimpan</span>
+                <div class="signature-actions">
+                    <button type="button" class="btn" id="owner-save-btn" disabled title="Simpan tanda tangan">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-danger" id="clear-owner" title="Hapus tanda tangan">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                </div>
+                <div class="signature-status" id="sign-status-owner">
+                    <i class="fas fa-pen"></i> Silahkan tanda tangan di area ini
+                </div>
+            </div>
+
+            <!-- Tanda Tangan Admin -->
+            <div class="signature-pad-container">
+                <label class="signature-label"><i class="fas fa-user-gear"></i> Tanda Tangan Admin</label>
+                <canvas class="signature-pad" id="admin-signature" title="Silahkan tanda tangan di area ini"></canvas>
+                <span id="admin-saved-badge" class="signature-saved"><i class="fas fa-check"></i> Tersimpan</span>
+                <div class="signature-actions">
+                    <button type="button" class="btn" id="admin-save-btn" disabled title="Simpan tanda tangan">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-danger" id="clear-admin" title="Hapus tanda tangan">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                </div>
+                <div class="signature-status" id="sign-status-admin">
+                    <i class="fas fa-pen"></i> Silahkan tanda tangan di area ini
+                </div>
+            </div>
+        </div>
+    </div>
+
+                <button type="submit" class="btn btn-block" id="submit-btn" title="Lanjutkan ke review perjanjian">
+                    <i class="fas fa-file-contract"></i> Lanjut ke Perjanjian
+                </button>
+            </form>
+        </div>
+
+        <div class="modal" id="preview-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Review Perjanjian</h2>
+                </div>
+                <div class="modal-body" id="preview-content"></div>
+                <div class="modal-footer">
+                    <div class="modal-actions">
+                        <button class="btn btn-success" id="generate-pdf" title="Download dokumen PDF">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                        <button class="btn btn-danger" id="close-preview" title="Tutup preview">
+                            <i class="fas fa-times"></i> Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="success-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Perjanjian Berhasil Di-download!</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Dokumen perjanjian telah berhasil di-generate. Silahkan kirim file PDF ini ke customer melalui WhatsApp secara manual.</p>
+                    <p>File telah tersimpan di folder Downloads Anda.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="close-modal" title="Tutup notifikasi">
+                        <i class="fas fa-times"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <!-- Tambahkan ini di bagian head -->
+    <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" preload="auto"></audio>
+        <footer class="footer">
+            <p>© 2025 QUICKCELLS TITIP JUAL - <span id="admin-name-footer">Quickcells </span> | Perjanjian Titip Jual Handphone</p>
+            <p class="tech-stack">
+                <span class="tech-badge">Digital Signature</span>
+                <span class="tech-badge">PDF Generator</span>
+                <span class="tech-badge">Responsive Design</span>
+            </p>
+        </footer>
+    </div>
+<!-- Load SignaturePad library -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+<!-- Load other libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<!-- Terakhir: Script custom kamu -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ==================== INISIALISASI ====================
+    const { jsPDF } = window.jspdf;
+    let ownerSignaturePad, adminSignaturePad;
+    let uploadedFiles = [];
+    let facePhoto = null, ktpPhoto = null, adminFacePhoto = null, adminKtpPhoto = null;
+    let ownerSignatureSaved = false, adminSignatureSaved = false;
+    const QUICKCELLS_ADDRESS = "Jl. Purnawarman 13-15 Gedung Bec Lama Lt LU Blok E 02, Kota Bandung, Jawa Barat 40117";
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+
+    // ==================== SIGNATURE PAD FUNCTIONALITY ====================
+    function initSignaturePads() {
+        const ownerCanvas = document.getElementById('owner-signature');
+        const adminCanvas = document.getElementById('admin-signature');
+        
+        ownerCanvas.width = ownerCanvas.offsetWidth;
+        ownerCanvas.height = ownerCanvas.offsetHeight;
+        adminCanvas.width = adminCanvas.offsetWidth;
+        adminCanvas.height = adminCanvas.offsetHeight;
+        
+        ownerSignaturePad = new SignaturePad(ownerCanvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)',
+            minWidth: 1.5,
+            maxWidth: 2.5,
+            throttle: 16,
+            velocityFilterWeight: 0.7
+        });
+        
+        adminSignaturePad = new SignaturePad(adminCanvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)',
+            minWidth: 1.5,
+            maxWidth: 2.5,
+            throttle: 16,
+            velocityFilterWeight: 0.7
+        });
+        
+        setupSignatureHandlers('owner');
+        setupSignatureHandlers('admin');
+    }
+
+    function setupSignatureHandlers(type) {
+        const pad = type === 'owner' ? ownerSignaturePad : adminSignaturePad;
+        const canvas = document.getElementById(`${type}-signature`);
+        const saveBtn = document.getElementById(`${type}-save-btn`);
+        const clearBtn = document.getElementById(`clear-${type}`);
+        const savedBadge = document.getElementById(`${type}-saved-badge`);
+        
+        canvas.addEventListener('mousedown', () => {
+            if (!pad.isEmpty()) {
+                saveBtn.disabled = false;
+                updateSignatureStatus(type, 'drawing');
+            }
+        });
+        
+        canvas.addEventListener('touchstart', () => {
+            if (!pad.isEmpty()) {
+                saveBtn.disabled = false;
+                updateSignatureStatus(type, 'drawing');
+            }
+        });
+        
+        pad.addEventListener('beginStroke', () => {
+            saveBtn.disabled = pad.isEmpty();
+            updateSignatureStatus(type, 'drawing');
+        });
+        
+        saveBtn.addEventListener('click', () => saveSignature(type));
+        clearBtn.addEventListener('click', () => clearSignature(type));
+        window.addEventListener('resize', () => handleCanvasResize(type));
+    }
+
+    function saveSignature(type) {
+        const pad = type === 'owner' ? ownerSignaturePad : adminSignaturePad;
+        const canvas = document.getElementById(`${type}-signature`);
+        const saveBtn = document.getElementById(`${type}-save-btn`);
+        const savedBadge = document.getElementById(`${type}-saved-badge`);
+        
+        if (!pad.isEmpty()) {
+            if (type === 'owner') ownerSignatureSaved = true;
+            else adminSignatureSaved = true;
+            
+            canvas.classList.add('saved');
+            savedBadge.style.display = 'block';
+            saveBtn.disabled = true;
+            updateSignatureStatus(type, 'saved');
+            playSound('success');
+            animateSavedBadge(savedBadge);
+        } else {
+            showError(`sign-status-${type}`, 'Harap buat tanda tangan terlebih dahulu');
+        }
+    }
+
+    function clearSignature(type) {
+        const pad = type === 'owner' ? ownerSignaturePad : adminSignaturePad;
+        const canvas = document.getElementById(`${type}-signature`);
+        const saveBtn = document.getElementById(`${type}-save-btn`);
+        const savedBadge = document.getElementById(`${type}-saved-badge`);
+        
+        pad.clear();
+        if (type === 'owner') ownerSignatureSaved = false;
+        else adminSignatureSaved = false;
+        
+        canvas.classList.remove('saved');
+        savedBadge.style.display = 'none';
+        saveBtn.disabled = true;
+        updateSignatureStatus(type, 'empty');
+    }
+
+    function updateSignatureStatus(type, state) {
+        const statusElement = document.getElementById(`sign-status-${type}`);
+        
+        switch (state) {
+            case 'saved':
+                statusElement.className = 'signature-status saved';
+                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Tanda tangan telah disimpan';
+                break;
+            case 'drawing':
+                statusElement.className = 'signature-status unsaved';
+                statusElement.innerHTML = '<i class="fas fa-save"></i> Klik simpan untuk menyimpan tanda tangan';
+                break;
+            default:
+                statusElement.className = 'signature-status';
+                statusElement.innerHTML = '<i class="fas fa-pen"></i> Silahkan tanda tangan di area ini';
+                break;
+        }
+    }
+
+    function handleCanvasResize(type) {
+        const pad = type === 'owner' ? ownerSignaturePad : adminSignaturePad;
+        const canvas = document.getElementById(`${type}-signature`);
+        const saved = type === 'owner' ? ownerSignatureSaved : adminSignatureSaved;
+        
+        if (saved) {
+            const data = pad.toData();
+            pad.off();
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            pad.on();
+            pad.fromData(data);
+        } else {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+    }
+
+    function animateSavedBadge(badgeElement) {
+        badgeElement.classList.add('animate-badge');
+        setTimeout(() => {
+            badgeElement.classList.remove('animate-badge');
+        }, 1000);
+    }
+
+    // ==================== FILE UPLOAD HANDLERS ====================
+    function setupFileUploads() {
+        // Upload foto wajah pemilik (20MB)
+        document.getElementById('face-upload').addEventListener('change', function(e) {
+            handleFileUpload(e, 'face-preview', 'face-error').then(function(file) {
+                facePhoto = file;
+            });
+        });
+        
+        // Upload foto KTP pemilik (20MB)
+        document.getElementById('ktp-upload').addEventListener('change', function(e) {
+            handleFileUpload(e, 'ktp-preview', 'ktp-photo-error').then(function(file) {
+                ktpPhoto = file;
+            });
+        });
+        
+        // Upload foto wajah admin (20MB)
+        document.getElementById('admin-face-upload').addEventListener('change', function(e) {
+            handleFileUpload(e, 'admin-face-preview', 'admin-face-error').then(function(file) {
+                adminFacePhoto = file;
+            });
+        });
+        
+        // Upload foto KTP admin (20MB)
+        document.getElementById('admin-ktp-upload').addEventListener('change', function(e) {
+            handleFileUpload(e, 'admin-ktp-preview', 'admin-ktp-photo-error').then(function(file) {
+                adminKtpPhoto = file;
+            });
+        });
+        
+        // Upload multiple foto HP (20MB per file)
+        document.getElementById('multi-upload').addEventListener('change', handleMultipleUpload);
+        document.getElementById('single-upload').addEventListener('change', handleSingleUpload);
+    }
+
+    function handleFileUpload(event, previewContainerId, errorId) {
+        return new Promise(function(resolve) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById(previewContainerId);
+            const errorElement = document.getElementById(errorId);
+            
+            if (!file) {
+                showError(errorId, 'File wajib diupload');
+                resolve(null);
+                return;
+            }
+            
+            if (!file.type.match('image.*')) {
+                showError(errorId, 'Hanya file gambar yang diizinkan');
+                event.target.value = '';
+                resolve(null);
+                return;
+            }
+            
+            if (file.size > MAX_FILE_SIZE) {
+                showError(errorId, 'Ukuran file maksimal 20MB');
+                event.target.value = '';
+                resolve(null);
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewContainer.innerHTML = '';
+                
+                const previewItem = document.createElement('div');
+                previewItem.className = 'file-preview';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-file';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.addEventListener('click', function() {
+                    previewContainer.innerHTML = '';
+                    showError(errorId, 'File wajib diupload');
+                    event.target.value = '';
+                    resolve(null);
+                });
+                
+                previewItem.appendChild(img);
+                previewItem.appendChild(removeBtn);
+                previewContainer.appendChild(previewItem);
+                
+                errorElement.style.display = 'none';
+                resolve(file);
+            };
+            
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function handleMultipleUpload(event) {
+        const files = Array.from(event.target.files);
+        const previewContainer = document.getElementById('file-preview');
+        const errorElement = document.getElementById('photo-error');
+        
+        if (files.length === 0) {
+            showError('photo-error', 'Minimal upload 3 foto');
+            return;
+        }
+        
+        if (files.length > 10) {
+            showError('photo-error', 'Maksimal 10 file yang diupload');
+            event.target.value = '';
+            return;
+        }
+        
+        const imageFiles = files.filter(function(file) {
+            return file.type.match('image.*') && file.size <= MAX_FILE_SIZE;
+        });
+        
+        if (imageFiles.length !== files.length) {
+            showError('photo-error', 'Hanya file gambar (max 20MB) yang diizinkan');
+            event.target.value = '';
+            return;
+        }
+        
+        uploadedFiles = [...uploadedFiles, ...imageFiles].slice(0, 10);
+        updateFilePreview();
+    }
+
+    function handleSingleUpload(event) {
+        const file = event.target.files[0];
+        const errorElement = document.getElementById('photo-error');
+        
+        if (!file) {
+            showError('photo-error', 'File wajib diupload');
+            return;
+        }
+        
+        if (!file.type.match('image.*')) {
+            showError('photo-error', 'Hanya file gambar yang diizinkan');
+            event.target.value = '';
+            return;
+        }
+        
+        if (file.size > MAX_FILE_SIZE) {
+            showError('photo-error', 'Ukuran file maksimal 20MB');
+            event.target.value = '';
+            return;
+        }
+        
+        uploadedFiles.push(file);
+        if (uploadedFiles.length > 10) {
+            uploadedFiles = uploadedFiles.slice(0, 10);
+            showError('photo-error', 'Maksimal 10 foto yang diupload');
+        }
+        
+        updateFilePreview();
+        event.target.value = '';
+    }
+
+    function updateFilePreview() {
+        const previewContainer = document.getElementById('file-preview');
+        const errorElement = document.getElementById('photo-error');
+        
+        previewContainer.innerHTML = '';
+        
+        if (uploadedFiles.length < 3) {
+            showError('photo-error', 'Minimal 3 foto handphone diperlukan');
+        } else {
+            errorElement.style.display = 'none';
+        }
+        
+        uploadedFiles.forEach(function(file, index) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'file-preview';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-file';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.addEventListener('click', function() {
+                    uploadedFiles.splice(index, 1);
+                    updateFilePreview();
+                });
+                
+                previewItem.appendChild(img);
+                previewItem.appendChild(removeBtn);
+                previewContainer.appendChild(previewItem);
+            };
+            
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ==================== SOUND EFFECTS ====================
+    function playSound(type) {
+        try {
+            const sound = document.getElementById(`${type}-sound`);
+            if (!sound) return;
+            
+            sound.volume = 0.3;
+            sound.currentTime = 0;
+            
+            const playPromise = sound.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error('Gagal memainkan suara:', error);
+                    document.body.addEventListener('click', () => sound.play(), { once: true });
+                });
+            }
+        } catch (error) {
+            console.error('Error dalam fungsi playSound:', error);
+        }
+    }
+
+    function showError(elementId, message) {
+        try {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            element.textContent = message;
+            element.style.display = 'block';
+            playSound('error');
+            
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - 100;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+            
+            element.classList.add('error-pulse');
+            setTimeout(function() {
+                element.classList.remove('error-pulse');
+            }, 2000);
+        } catch (error) {
+            console.error('Error dalam fungsi showError:', error);
+        }
+    }
+
+  // ==================== FORM VALIDATION ====================
+    function setupFormValidation() {
+        const fields = [
+            { id: 'full-name', errorId: 'full-name-error', message: 'Nama lengkap wajib diisi', validator: validateRequired },
+            { id: 'ktp', errorId: 'ktp-error', message: 'Nomor KTP harus 16 digit angka', validator: validateKTP },
+            { id: 'phone', errorId: 'phone-error', message: 'Nomor harus diawali 8 (contoh: 8123456789)', validator: validatePhone },
+            { id: 'email', errorId: 'email-error', message: 'Format email tidak valid (contoh: nama@domain.com)', validator: validateEmail },
+            { id: 'address', errorId: 'address-error', message: 'Alamat wajib diisi', validator: validateRequired },
+            { id: 'phone-brand', errorId: 'phone-brand-error', message: 'Merek handphone wajib diisi', validator: validateRequired },
+            { id: 'phone-model', errorId: 'phone-model-error', message: 'Model handphone wajib diisi', validator: validateRequired },
+            { id: 'imei1', errorId: 'imei1-error', message: 'IMEI 1 wajib diisi (15 digit angka)', validator: validateIMEI1 },
+            { id: 'price', errorId: 'price-error', message: 'Harga wajib diisi', validator: validatePrice },
+            { id: 'start-date', errorId: 'start-date-error', message: 'Tanggal mulai wajib diisi', validator: validateDate },
+            { id: 'admin-name', errorId: 'admin-name-error', message: 'Nama admin wajib diisi', validator: validateRequired },
+            { id: 'admin-ktp', errorId: 'admin-ktp-error', message: 'KTP admin wajib diisi (16 digit angka)', validator: validateKTP },
+            { id: 'admin-phone', errorId: 'admin-phone-error', message: 'Nomor admin wajib diisi', validator: validatePhone },
+            { id: 'admin-email', errorId: 'admin-email-error', message: 'Email admin wajib diisi', validator: validateEmail }
+        ];
+
+        fields.forEach(function(field) {
+            const element = document.getElementById(field.id);
+            if (element) {
+                element.addEventListener('input', function() {
+                    field.validator(this, field.errorId, field.message);
+                });
+                element.addEventListener('blur', function() {
+                    field.validator(this, field.errorId, field.message);
+                });
+            }
+        });
+
+        document.getElementById('start-date').addEventListener('change', updateEndDate);
+        document.getElementById('phone-condition').addEventListener('change', toggleConditionalFields);
+        document.getElementById('price').addEventListener('input', formatCurrency);
+        document.getElementById('quickcells-form').addEventListener('submit', handleFormSubmit);
+    }
+
+    function validateRequired(input, errorId, message) {
+        if (!input.value.trim()) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = message;
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateKTP(input, errorId) {
+        const value = input.value.trim();
+        if (value.length !== 16 || !/^\d+$/.test(value)) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'Nomor KTP harus 16 digit angka';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validatePhone(input, errorId) {
+        const value = input.value.trim();
+        if (!/^8\d{8,12}$/.test(value)) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'Nomor harus diawali 8 (contoh: 8123456789)';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateEmail(input, errorId) {
+        const value = input.value.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'Format email tidak valid (contoh: nama@domain.com)';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateIMEI1(input, errorId) {
+        const value = input.value.trim();
+        if (value.length !== 15 || !/^\d+$/.test(value)) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'IMEI 1 harus 15 digit angka';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validatePrice(input, errorId) {
+        const value = input.value.trim();
+        if (!value || isNaN(value.replace(/\./g, ''))) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'Harga harus berupa angka';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            document.getElementById(errorId).style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateDate(input, errorId) {
+        if (!input.value) {
+            input.classList.add('invalid');
+            document.getElementById(errorId).textContent = 'Tanggal wajib diisi';
+            document.getElementById(errorId).style.display = 'block';
+            return false;
+        } else {
+            const selectedDate = new Date(input.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                input.classList.add('invalid');
+                document.getElementById(errorId).textContent = 'Tanggal tidak boleh di masa lalu';
+                document.getElementById(errorId).style.display = 'block';
+                return false;
+            } else {
+                input.classList.remove('invalid');
+                document.getElementById(errorId).style.display = 'none';
+                return true;
+            }
+        }
+    }
+
+    function formatCurrency(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        e.target.value = value;
+        validatePrice(e.target, 'price-error');
+    }
+
+    function updateEndDate() {
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        
+        if (startDateInput.value) {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 14);
+            
+            const formattedDate = endDate.toISOString().split('T')[0];
+            endDateInput.value = formattedDate;
+        } else {
+            endDateInput.value = '';
+        }
+    }
+
+    function toggleConditionalFields() {
+        const condition = document.getElementById('phone-condition').value;
+        const completenessWrapper = document.getElementById('completeness-wrapper');
+        const detailWrapper = document.getElementById('completeness-detail-wrapper');
+        
+        if (condition === 'Bekas') {
+            completenessWrapper.style.display = 'block';
+            detailWrapper.style.display = 'block';
+            setTimeout(function() {
+                completenessWrapper.style.opacity = '1';
+                detailWrapper.style.opacity = '1';
+            }, 10);
+        } else {
+            completenessWrapper.style.opacity = '0';
+            detailWrapper.style.opacity = '0';
+            setTimeout(function() {
+                completenessWrapper.style.display = 'none';
+                detailWrapper.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        const isValid = validateAllFields();
+        if (isValid) showPreviewModal();
+        else playSound('error');
+    }
+
+    function validateAllFields() {
+        let isValid = true;
+        
+        // Validasi field teks wajib
+        const requiredFields = [
+            { id: 'full-name', errorId: 'full-name-error', message: 'Nama lengkap wajib diisi' },
+            { id: 'ktp', errorId: 'ktp-error', message: 'Nomor KTP harus 16 digit angka' },
+            { id: 'phone', errorId: 'phone-error', message: 'Nomor WhatsApp wajib diisi' },
+            { id: 'email', errorId: 'email-error', message: 'Email wajib diisi' },
+            { id: 'address', errorId: 'address-error', message: 'Alamat wajib diisi' },
+            { id: 'phone-brand', errorId: 'phone-brand-error', message: 'Merek HP wajib diisi' },
+            { id: 'phone-model', errorId: 'phone-model-error', message: 'Model HP wajib diisi' },
+            { id: 'imei1', errorId: 'imei1-error', message: 'IMEI 1 wajib diisi' },
+            { id: 'price', errorId: 'price-error', message: 'Harga wajib diisi' },
+            { id: 'start-date', errorId: 'start-date-error', message: 'Tanggal mulai wajib diisi' },
+            { id: 'admin-name', errorId: 'admin-name-error', message: 'Nama admin wajib diisi' },
+            { id: 'admin-ktp', errorId: 'admin-ktp-error', message: 'KTP admin wajib diisi' },
+            { id: 'admin-phone', errorId: 'admin-phone-error', message: 'Nomor admin wajib diisi' },
+            { id: 'admin-email', errorId: 'admin-email-error', message: 'Email admin wajib diisi' }
+        ];
+
+        requiredFields.forEach(field => {
+            const input = document.getElementById(field.id);
+            if (!input.value.trim()) {
+                showError(field.errorId, field.message);
+                isValid = false;
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        });
+
+        // Validasi format khusus
+        if (!/^\d{16}$/.test(document.getElementById('ktp').value)) {
+            showError('ktp-error', 'KTP harus 16 digit angka');
+            isValid = false;
+        }
+
+        if (!/^8\d{8,12}$/.test(document.getElementById('phone').value)) {
+            showError('phone-error', 'Nomor harus diawali 8 (contoh: 8123456789)');
+            isValid = false;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(document.getElementById('email').value)) {
+            showError('email-error', 'Format email tidak valid');
+            isValid = false;
+        }
+
+        // Validasi kondisional (Handphone Bekas)
+        if (document.getElementById('phone-condition').value === 'Bekas') {
+            if (!document.getElementById('phone-completeness').value) {
+                showError('completeness-detail-error', 'Pilih kelengkapan handphone');
+                isValid = false;
+            }
+        }
+
+        // Validasi upload file (20MB)
+        const requiredPhotos = [
+            { check: !facePhoto, errorId: 'face-error', message: 'Foto wajah pemilik wajib diupload' },
+            { check: !ktpPhoto, errorId: 'ktp-photo-error', message: 'Foto KTP pemilik wajib diupload' },
+            { check: !adminFacePhoto, errorId: 'admin-face-error', message: 'Foto wajah admin wajib diupload' },
+            { check: !adminKtpPhoto, errorId: 'admin-ktp-photo-error', message: 'Foto KTP admin wajib diupload' },
+            { check: uploadedFiles.length < 3, errorId: 'photo-error', message: 'Minimal 3 foto handphone' }
+        ];
+
+        requiredPhotos.forEach(photo => {
+            if (photo.check) {
+                showError(photo.errorId, photo.message);
+                isValid = false;
+            }
+        });
+
+        // Validasi tanda tangan
+        if (!ownerSignatureSaved) {
+            showError('sign-status-owner', 'Tanda tangan pemilik belum disimpan');
+            isValid = false;
+        }
+
+        if (!adminSignatureSaved) {
+            showError('sign-status-admin', 'Tanda tangan admin belum disimpan');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // ==================== PREVIEW MODAL ====================
+    function showPreviewModal() {
+        const modal = document.getElementById('preview-modal');
+        const previewContent = document.getElementById('preview-content');
+        
+        previewContent.innerHTML = generateAgreementContent();
+        modal.style.display = 'flex';
+        
+        document.getElementById('close-preview').addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        document.getElementById('generate-pdf').addEventListener('click', generateProfessionalPDF);
+    }
+
+    function generateAgreementContent() {
+        const formData = getFormData();
+        const legalTerms = generateLegalTerms(formData);
+        
+        return `
+            <div class="preview-header">
+                <h2>PERJANJIAN TITIP JUAL HANDPHONE</h2>
+                <p>Quickcells - ${formatDate(new Date())}</p>
+            </div>
+            
+            <div class="preview-section">
+                <h3><i class="fas fa-user-tag"></i> DATA PEMILIK</h3>
+                <div class="preview-grid">
+                    <div class="preview-row">
+                        <span class="preview-label">Nama Lengkap:</span>
+                        <span class="preview-value">${formData.fullName}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Nomor KTP:</span>
+                        <span class="preview-value">${formData.ktp}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Nomor WhatsApp:</span>
+                        <span class="preview-value">${formData.phone}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Email:</span>
+                        <span class="preview-value">${formData.email}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Alamat:</span>
+                        <span class="preview-value">${formData.address}</span>
+                    </div>
+                </div>
+                
+                <div class="photo-preview-grid">
+                    <div class="photo-preview-item">
+                        <h4>Foto Wajah Pemilik</h4>
+                        <img src="${URL.createObjectURL(formData.facePhoto)}" alt="Foto Wajah Pemilik">
+                    </div>
+                    <div class="photo-preview-item">
+                        <h4>Foto KTP Pemilik</h4>
+                        <img src="${URL.createObjectURL(formData.ktpPhoto)}" alt="Foto KTP Pemilik">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3><i class="fas fa-mobile-alt"></i> DATA HANDPHONE</h3>
+                <div class="preview-grid">
+                    <div class="preview-row">
+                        <span class="preview-label">Merek:</span>
+                        <span class="preview-value">${formData.phoneBrand}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Model:</span>
+                        <span class="preview-value">${formData.phoneModel}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Kondisi:</span>
+                        <span class="preview-value">${formData.phoneCondition}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Kelengkapan:</span>
+                        <span class="preview-value">${formData.phoneCompleteness}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Detail Kelengkapan:</span>
+                        <span class="preview-value">${formData.completenessDetail}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">RAM:</span>
+                        <span class="preview-value">${formData.ram} GB</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Penyimpanan:</span>
+                        <span class="preview-value">${formData.storage} GB</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">IMEI 1:</span>
+                        <span class="preview-value">${formData.imei1}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">IMEI 2:</span>
+                        <span class="preview-value">${formData.imei2 || '-'}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Harga Setor:</span>
+                        <span class="preview-value">Rp ${formData.price}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Tanggal Mulai:</span>
+                        <span class="preview-value">${formData.startDate}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Tanggal Berakhir:</span>
+                        <span class="preview-value">${formData.endDate}</span>
+                    </div>
+                </div>
+                
+                <div class="photo-preview-grid">
+                    <h4>Foto Handphone (${formData.phonePhotos.length} foto)</h4>
+                    ${formData.phonePhotos.map(function(file, index) {
+                        return `
+                            <div class="photo-preview-item">
+                                <img src="${URL.createObjectURL(file)}" alt="Foto HP ${index + 1}">
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3><i class="fas fa-user-shield"></i> DATA ADMIN</h3>
+                <div class="preview-grid">
+                    <div class="preview-row">
+                        <span class="preview-label">Nama Admin:</span>
+                        <span class="preview-value">${formData.adminName}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Nomor KTP Admin:</span>
+                        <span class="preview-value">${formData.adminKtp}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Nomor WhatsApp Admin:</span>
+                        <span class="preview-value">${formData.adminPhone}</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Email Admin:</span>
+                        <span class="preview-value">${formData.adminEmail}</span>
+                    </div>
+                </div>
+                
+                <div class="photo-preview-grid">
+                    <div class="photo-preview-item">
+                        <h4>Foto Wajah Admin</h4>
+                        <img src="${URL.createObjectURL(formData.adminFacePhoto)}" alt="Foto Wajah Admin">
+                    </div>
+                    <div class="photo-preview-item">
+                        <h4>Foto KTP Admin</h4>
+                        <img src="${URL.createObjectURL(formData.adminKtpPhoto)}" alt="Foto KTP Admin">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3><i class="fas fa-gavel"></i> PASAL-PASAL PERJANJIAN</h3>
+                <div class="agreement-content">
+                    ${legalTerms.map(function(term) {
+                        return `
+                            <h4>${term.title}</h4>
+                            ${term.clauses.map(function(clause) {
+                                return `<p>${clause}</p>`;
+                            }).join('')}
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+            
+            <div class="preview-section signature-section">
+                <h3><i class="fas fa-signature"></i> TANDA TANGAN DIGITAL</h3>
+                <div class="signature-preview-grid">
+                    <div class="signature-preview-item">
+                        <h4>Tanda Tangan Pemilik</h4>
+                        <img src="${formData.ownerSignature}" alt="Tanda Tangan Pemilik">
+                    </div>
+                    <div class="signature-preview-item">
+                        <h4>Tanda Tangan Admin</h4>
+                        <img src="${formData.adminSignature}" alt="Tanda Tangan Admin">
+                    </div>
+                </div>
+            </div>
+            
+            <style>
+                .preview-header {
+                    text-align: center;
+                    margin-bottom: 2rem;
+                    padding-bottom: 1rem;
+                    border-bottom: 1px solid var(--border);
+                }
+                .preview-section {
+                    margin-bottom: 2rem;
+                    padding-bottom: 1rem;
+                    border-bottom: 1px solid var(--border);
+                }
+                .preview-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                }
+                .preview-row {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 0.5rem;
+                }
+                .preview-label {
+                    font-weight: 500;
+                    color: var(--primary-light);
+                    font-size: 0.9rem;
+                }
+                .preview-value {
+                    font-size: 1rem;
+                    word-break: break-word;
+                }
+                .photo-preview-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                    gap: 1rem;
+                    margin-top: 1rem;
+                }
+                .photo-preview-item {
+                    border-radius: 8px;
+                    overflow: hidden;
+                    border: 1px solid var(--border);
+                }
+                .photo-preview-item img {
+                    width: 100%;
+                    height: 120px;
+                    object-fit: cover;
+                }
+                .signature-preview-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 2rem;
+                    margin-top: 1rem;
+                }
+                .signature-preview-item {
+                    text-align: center;
+                }
+                .signature-preview-item img {
+                    width: 100%;
+                    height: 120px;
+                    object-fit: contain;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: white;
+                }
+                .agreement-content h4 {
+                    color: var(--primary-light);
+                    margin: 1rem 0 0.5rem 0;
+                    font-size: 0.95rem;
+                }
+                .agreement-content p {
+                    margin: 0.3rem 0;
+                    font-size: 0.9rem;
+                    line-height: 1.5;
+                }
+            </style>
+        `;
+    }
+
+    function getFormData() {
+        return {
+            fullName: document.getElementById('full-name').value,
+            ktp: document.getElementById('ktp').value,
+            phone: '+62' + document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            address: document.getElementById('address').value,
+            phoneBrand: document.getElementById('phone-brand').value,
+            phoneModel: document.getElementById('phone-model').value,
+            phoneCondition: document.getElementById('phone-condition').value,
+            phoneCompleteness: document.getElementById('phone-completeness').value || '-',
+            completenessDetail: document.getElementById('completeness-detail').value || '-',
+            ram: document.getElementById('ram').value || '-',
+            storage: document.getElementById('storage').value || '-',
+            imei1: document.getElementById('imei1').value,
+            imei2: document.getElementById('imei2').value || '-',
+            price: document.getElementById('price').value,
+            startDate: formatDate(document.getElementById('start-date').value),
+            endDate: formatDate(document.getElementById('end-date').value),
+            adminName: document.getElementById('admin-name').value,
+            adminKtp: document.getElementById('admin-ktp').value,
+            adminPhone: '+62' + document.getElementById('admin-phone').value,
+            adminEmail: document.getElementById('admin-email').value,
+            facePhoto: facePhoto,
+            ktpPhoto: ktpPhoto,
+            adminFacePhoto: adminFacePhoto,
+            adminKtpPhoto: adminKtpPhoto,
+            phonePhotos: uploadedFiles,
+            ownerSignature: ownerSignaturePad.toDataURL(),
+            adminSignature: adminSignaturePad.toDataURL(),
+            quickcellsAddress: QUICKCELLS_ADDRESS
+        };
+    }
+
+    function generateLegalTerms(formData) {
+        return [
+            {
+                title: "PASAL 1 - STATUS KEPEMILIKAN DAN TANGGUNG JAWAB HUKUM",
+                clauses: [
+                    `1.1 Pihak Pertama (${formData.fullName}) menyatakan dengan sesungguhnya bahwa handphone ${formData.phoneBrand} ${formData.phoneModel} dengan IMEI ${formData.imei1} merupakan milik pribadi yang sah dan bukan hasil tindak pidana.`,
+                    "1.2 Jika di kemudian hari terbukti handphone tersebut bukan milik Pihak Pertama atau merupakan barang ilegal, maka Pihak Kedua (Quickcells) tidak bertanggung jawab secara hukum apapun.",
+                    "1.3 Tanda tangan digital dalam perjanjian ini merupakan bukti pengakuan sah bahwa Pihak Pertama adalah pemilik legitime dari handphone yang dititipkan.",
+                    `1.4 Pihak Kedua tidak bertanggung jawab atas tuntutan hukum dari pihak ketiga terkait status kepemilikan handphone. Alamat resmi Quickcells: ${formData.quickcellsAddress}`
+                ]
+            },
+            {
+                title: "PASAL 2 - MASA PERJANJIAN DAN PERPANJANGAN",
+                clauses: [
+                    `2.1 Perjanjian ini berlaku selama 14 hari kalender terhitung sejak ${formData.startDate} hingga ${formData.endDate}.`,
+                    "2.2 Jika setelah masa perjanjian berakhir handphone belum terjual, kedua belah pihak dapat memperpanjang masa titip jual tanpa perlu membuat perjanjian baru.",
+                    "2.3 Perpanjangan dilakukan dengan persetujuan via WhatsApp/email dan memiliki kekuatan hukum yang sama dengan perjanjian ini.",
+                    "2.4 Masa perpanjangan berlaku untuk 14 hari berikutnya dan dapat diperpanjang lagi dengan kesepakatan yang sama."
+                ]
+            },
+            {
+                title: "PASAL 3 - HARGA DAN PEMBAYARAN",
+                clauses: [
+                    `3.1 Harga titip jual disepakati sebesar Rp ${formData.price}.`,
+                    "3.2 Pihak Kedua berhak menjual handphone dengan harga lebih tinggi dan kelebihan menjadi keuntungan Quickcells.",
+                    "3.3 Pembayaran akan ditransfer ke rekening Pihak Pertama maksimal 1x24 jam setelah handphone terjual.",
+                    "3.4 Jika terjadi dispute harga, keputusan final berada di tangan manajemen Quickcells."
+                ]
+            },
+            {
+                title: "PASAL 4 - KONDISI BARANG DAN RISIKO",
+                clauses: [
+                    `4.1 Handphone diterima oleh Pihak Kedua dalam kondisi ${formData.phoneCondition} dengan kelengkapan: ${formData.completenessDetail}.`,
+                    "4.2 Kerusakan setelah penandatanganan perjanjian menjadi tanggung jawab Pihak Kedua.",
+                    "4.3 Kerusakan akibat force majeure (bencana alam, kerusuhan, dll) bukan tanggung jawab kedua belah pihak.",
+                    "4.4 Pihak Kedua berhak menolak pengembalian handphone jika terdapat kerusakan tambahan."
+                ]
+            },
+            {
+                title: "PASAL 5 - PENYELESAIAN SENGKETA",
+                clauses: [
+                    "5.1 Segala sengketa akan diselesaikan secara musyawarah oleh kedua belah pihak.",
+                    `5.2 Jika tidak tercapai kesepakatan, akan diselesaikan melalui Pengadilan Negeri Bandung dengan alamat Quickcells: ${formData.quickcellsAddress}`,
+                    "5.3 Biaya hukum dan denda (jika ada) menjadi tanggung jawab pihak yang melanggar perjanjian."
+                ]
+            }
+        ];
+    }
+     // ==================== PDF GENERATOR ====================
+    async function generateProfessionalPDF() {
+        const pdf = new jsPDF();
+        const formData = getFormData();
+        const legalTerms = generateLegalTerms(formData);
+        
+        try {
+            const btn = document.getElementById('generate-pdf');
+            const originalBtnText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat PDF...';
+            
+            await addCoverPage(pdf, formData);
+            pdf.addPage();
+            await addOwnerPage(pdf, formData);
+            pdf.addPage();
+            await addPhoneSpecPage(pdf, formData);
+            pdf.addPage();
+            await addAdminPage(pdf, formData);
+            pdf.addPage();
+            await addLegalTermsPage(pdf, legalTerms.slice(0, 3));
+            pdf.addPage();
+            await addLegalTermsPage(pdf, legalTerms.slice(3));
+            pdf.addPage();
+            await addSignaturePage(pdf, formData);
+            
+            addHeaderFooter(pdf);
+            
+            const fileName = `PERJANJIAN_TITIP_JUAL_${formData.fullName.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`;
+            pdf.save(fileName);
+            
+            showSuccessNotification();
+            playSound('success');
+            
+        } catch (error) {
+            console.error("PDF Generation Error:", error);
+            showError('generate-pdf', 'Gagal membuat dokumen PDF: ' + error.message);
+        } finally {
+            const btn = document.getElementById('generate-pdf');
+            btn.disabled = false;
+            btn.innerHTML = originalBtnText;
+        }
+    }
+
+    async function addCoverPage(pdf, formData) {
+        const logoUrl = 'https://i.imgur.com/8QHjrmd.png';
+        await addImageToPDF(pdf, logoUrl, 'PNG', (pdf.internal.pageSize.getWidth() - 60) / 2, 30, 60, 30);
+        
+        pdf.setFontSize(18);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text("PERJANJIAN TITIP JUAL HANDPHONE", pdf.internal.pageSize.getWidth() / 2, 80, { align: 'center' });
+        
+        pdf.setFontSize(14);
+        pdf.text("QUICKCELLS SYSTEM", pdf.internal.pageSize.getWidth() / 2, 90, { align: 'center' });
+        
+        pdf.setFontSize(12);
+        pdf.text(`Nomor: QC/${new Date().getFullYear()}/${Math.floor(Math.random() * 1000)}`, pdf.internal.pageSize.getWidth() / 2, 110, { align: 'center' });
+        pdf.text(`Tanggal: ${formData.startDate}`, pdf.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
+        
+        pdf.setFontSize(11);
+        const openingText = [
+            `Pada hari ini, ${formData.startDate}, bertempat di kantor Quickcells ${QUICKCELLS_ADDRESS},`,
+            `telah dibuat dan ditandatangani Perjanjian Titip Jual Handphone antara:`
+        ];
+        pdf.text(openingText, pdf.internal.pageSize.getWidth() / 2, 150, { align: 'center', maxWidth: 180 });
+    }
+
+    async function addOwnerPage(pdf, formData) {
+        const margin = 20;
+        let y = margin;
+        
+        pdf.setFontSize(16);
+        pdf.text("DATA PEMILIK BARANG", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+        y += 15;
+        
+        pdf.setFontSize(11);
+        pdf.text(`Nama Lengkap    : ${formData.fullName}`, margin, y);
+        y += 8;
+        pdf.text(`Nomor KTP         : ${formData.ktp}`, margin, y);
+        y += 8;
+        pdf.text(`No. WhatsApp   : ${formData.phone}`, margin, y);
+        y += 8;
+        pdf.text(`Email                 : ${formData.email}`, margin, y);
+        y += 8;
+        pdf.text(`Alamat              : ${formData.address}`, margin, y, { maxWidth: 170 });
+        y += 15;
+        
+        const photoSize = 60;
+        const centerX = pdf.internal.pageSize.getWidth() / 2;
+        
+        await addImageToPDF(pdf, formData.facePhoto, 'JPEG', centerX - photoSize - 10, y, photoSize, photoSize);
+        pdf.text("Foto Wajah Pemilik", centerX - photoSize - 10 + photoSize/2, y + photoSize + 5, { align: 'center' });
+        
+        await addImageToPDF(pdf, formData.ktpPhoto, 'JPEG', centerX + 10, y, photoSize, photoSize);
+        pdf.text("Foto KTP Pemilik", centerX + 10 + photoSize/2, y + photoSize + 5, { align: 'center' });
+    }
+
+    async function addPhoneSpecPage(pdf, formData) {
+        const margin = 20;
+        let y = margin;
+        
+        pdf.setFontSize(16);
+        pdf.text("SPESIFIKASI HANDPHONE", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+        y += 15;
+        
+        pdf.setFontSize(11);
+        pdf.text(`Merek                     : ${formData.phoneBrand}`, margin, y);
+        y += 8;
+        pdf.text(`Model                     : ${formData.phoneModel}`, margin, y);
+        y += 8;
+        pdf.text(`Kondisi                  : ${formData.phoneCondition}`, margin, y);
+        y += 8;
+        pdf.text(`Kelengkapan         : ${formData.phoneCompleteness}`, margin, y);
+        y += 8;
+        pdf.text(`Detail Kelengkapan : ${formData.completenessDetail}`, margin, y);
+        y += 8;
+        pdf.text(`RAM                       : ${formData.ram} GB`, margin, y);
+        y += 8;
+        pdf.text(`Penyimpanan        : ${formData.storage} GB`, margin, y);
+        y += 8;
+        pdf.text(`IMEI 1                   : ${formData.imei1}`, margin, y);
+        y += 8;
+        pdf.text(`IMEI 2                   : ${formData.imei2 || '-'}`, margin, y);
+        y += 8;
+        pdf.text(`Harga Setor         : Rp ${formData.price}`, margin, y);
+        y += 15;
+        
+        const photoSize = 40;
+        let x = margin;
+        let photosAdded = 0;
+        
+        for (let i = 0; i < Math.min(formData.phonePhotos.length, 4); i++) {
+            await addImageToPDF(pdf, formData.phonePhotos[i], 'JPEG', x, y, photoSize, photoSize);
+            pdf.text(`Foto ${i+1}`, x + photoSize/2, y + photoSize + 5, { align: 'center' });
+            
+            x += photoSize + 10;
+            photosAdded++;
+            
+            if (photosAdded % 2 === 0) {
+                x = margin;
+                y += photoSize + 15;
+            }
+        }
+    }
+
+    async function addAdminPage(pdf, formData) {
+        const margin = 20;
+        let y = margin;
+        
+        pdf.setFontSize(16);
+        pdf.text("DATA ADMIN QUICKCELLS", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+        y += 15;
+        
+        pdf.setFontSize(11);
+        pdf.text(`Nama Admin       : ${formData.adminName}`, margin, y);
+        y += 8;
+        pdf.text(`Nomor KTP         : ${formData.adminKtp}`, margin, y);
+        y += 8;
+        pdf.text(`No. WhatsApp   : ${formData.adminPhone}`, margin, y);
+        y += 8;
+        pdf.text(`Email                 : ${formData.adminEmail}`, margin, y);
+        y += 15;
+        
+        const photoSize = 60;
+        const centerX = pdf.internal.pageSize.getWidth() / 2;
+        
+        await addImageToPDF(pdf, formData.adminFacePhoto, 'JPEG', centerX - photoSize - 10, y, photoSize, photoSize);
+        pdf.text("Foto Wajah Admin", centerX - photoSize - 10 + photoSize/2, y + photoSize + 5, { align: 'center' });
+        
+        await addImageToPDF(pdf, formData.adminKtpPhoto, 'JPEG', centerX + 10, y, photoSize, photoSize);
+        pdf.text("Foto KTP Admin", centerX + 10 + photoSize/2, y + photoSize + 5, { align: 'center' });
+    }
+
+    async function addLegalTermsPage(pdf, terms) {
+        const margin = 20;
+        let y = margin;
+        
+        pdf.setFontSize(16);
+        pdf.text("PASAL-PASAL PERJANJIAN", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+        y += 15;
+        
+        pdf.setFontSize(11);
+        terms.forEach(term => {
+            pdf.setFont(undefined, 'bold');
+            pdf.text(term.title, margin, y);
+            y += 8;
+            
+            pdf.setFont(undefined, 'normal');
+            term.clauses.forEach(clause => {
+                const lines = pdf.splitTextToSize(clause, pdf.internal.pageSize.getWidth() - 2*margin);
+                pdf.text(lines, margin + 5, y);
+                y += lines.length * 7;
+            });
+            y += 5;
+        });
+        
+        pdf.setFontSize(9);
+        pdf.setTextColor(100);
+        pdf.text("*Dokumen ini memiliki kekuatan hukum yang sah", margin, pdf.internal.pageSize.getHeight() - 10);
+    }
+
+    async function addSignaturePage(pdf, formData) {
+        const margin = 20;
+        const centerX = pdf.internal.pageSize.getWidth() / 2;
+        let y = margin;
+        
+        pdf.setFontSize(16);
+        pdf.text("TANDA TANGAN PARA PIHAK", centerX, y, { align: 'center' });
+        y += 20;
+        
+        pdf.setFontSize(10);
+        const statement = [
+            "Dengan ini kedua belah pihak menyatakan telah membaca, memahami,",
+            "dan menyetujui seluruh pasal-pasal dalam perjanjian ini."
+        ];
+        pdf.text(statement, centerX, y, { align: 'center' });
+        y += 20;
+        
+        const sigWidth = 80;
+        const sigHeight = 40;
+        const x1 = centerX - sigWidth - 20;
+        const x2 = centerX + 20;
+        
+        pdf.text("Pihak Pertama (Pemilik)", x1 + sigWidth/2, y, { align: 'center' });
+        pdf.rect(x1, y + 10, sigWidth, sigHeight);
+        await addImageToPDF(pdf, formData.ownerSignature, 'PNG', x1, y + 10, sigWidth, sigHeight);
+        pdf.text(`(${formData.fullName})`, x1 + sigWidth/2, y + sigHeight + 20, { align: 'center' });
+        
+        pdf.text("Pihak Kedua (Admin Quickcells)", x2 + sigWidth/2, y, { align: 'center' });
+        pdf.rect(x2, y + 10, sigWidth, sigHeight);
+        await addImageToPDF(pdf, formData.adminSignature, 'PNG', x2, y + 10, sigWidth, sigHeight);
+        pdf.text(`(${formData.adminName})`, x2 + sigWidth/2, y + sigHeight + 20, { align: 'center' });
+        
+        pdf.setFontSize(12);
+        pdf.text(`Bandung, ${formData.startDate}`, centerX, y + sigHeight + 40, { align: 'center' });
+    }
+
+    function addHeaderFooter(pdf) {
+        const pageCount = pdf.internal.getNumberOfPages();
+        const margin = 15;
+        
+        for (let i = 1; i <= pageCount; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(0, 0, 0);
+            pdf.text("PERJANJIAN TITIP JUAL HANDPHONE - QUICKCELLS", pdf.internal.pageSize.getWidth() / 2, margin, { align: 'center' });
+            
+            pdf.setFontSize(8);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`Halaman ${i} dari ${pageCount}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - margin, { align: 'center' });
+        }
+    }
+
+    async function addImageToPDF(pdf, fileOrUrl, format, x, y, width, height) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = function() {
+                pdf.addImage(img, format, x, y, width, height);
+                resolve();
+            };
+            
+            if (typeof fileOrUrl === 'string') {
+                img.src = fileOrUrl;
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(fileOrUrl);
+            }
+        });
+    }
+
+    function showSuccessNotification() {
+        const modal = document.getElementById('success-modal');
+        modal.style.display = 'flex';
+        
+        document.getElementById('close-modal').addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        document.getElementById('preview-modal').style.display = 'none';
+        
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+    }
+
+    // ==================== INITIALIZATION ====================
+    function init() {
+        initSignaturePads();
+        setupFormValidation();
+        setupFileUploads();
+        
+        document.getElementById('admin-name').addEventListener('input', function() {
+            document.getElementById('admin-name-footer').textContent = this.value || 'Quickcells';
+        });
+    }
+
+    init();
+});
+</script>
+</body>
+</html>
